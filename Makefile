@@ -47,7 +47,6 @@ define set_release
 endef
 
 MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS AREA_DETECTOR
-$(foreach mod, $(MODULE_LIST), $(eval $(call set_release,$(mod)) ))
 
 .PHONY: release base asyn calc sscan busy autosave iocstats clean update
 
@@ -96,6 +95,7 @@ release:
 		      $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
 	echo "SUPPORT=${SUPPORT}" > "$(SUPPORT)/configure/RELEASE"
 	cat "${SUPPORT}/configure/RELEASE.template" >> "$(SUPPORT)/configure/RELEASE"
+	$(foreach mod, $(MODULE_LIST), $(eval $(call set_release,$(mod)) ))
 	$(PERL) configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 	$(SED) -i 's/^IPAC/#IPAC/g' $(RELEASE_FILES)
 	$(SED) -i 's/^SNCSEQ/#SNCSEQ/g' $(RELEASE_FILES)
