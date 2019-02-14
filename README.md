@@ -1,4 +1,6 @@
-# epics-modules
+# Modular build of EPICS and areaDetector
+
+[![Build Status](https://travis-ci.com/stuwilkins/epics-modules.svg?branch=master)](https://travis-ci.com/stuwilkins/epics-modules)
 
 ## Introduction 
 
