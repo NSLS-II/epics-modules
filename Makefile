@@ -4,8 +4,18 @@ SUPPORT := $(dir $(MKFILE_PATH))
 $(info MKFILE_PATH=${MKFILE_PATH})
 $(info SUPPORT=${SUPPORT})
 
+ASYN=$(SUPPORT)/asyn
+EPICS_BASE=$(SUPPORT)/epics-base
+AUTOSAVE=$(SUPPORT)/autosave
+BUSY=$(SUPPORT)/busy
+CALC=$(SUPPORT)/calc
+SSCAN=$(SUPPORT)/sscan
+DEVIOCSTATS=$(SUPPORT)/iocStats
+SNCSEQ=$(SUPPORT)/seq
+AREA_DETECTOR=$(SUPPORT)/areaDetector
+
 # Include overrides
-include configure/RELEASE
+#include configure/RELEASE
 
 MASTER_FILE=configure/RELEASE
 PERL=perl
@@ -96,6 +106,16 @@ release:
 		      $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
 	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_PRODS.local \
 		      $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
+	echo "SUPPORT=${SUPPORT}" > "$(SUPPORT)/configure/RELEASE"
+	echo "ASYN=$(SUPPORT)/asyn" >> "$(SUPPORT)/configure/RELEASE"
+	echo "EPICS_BASE=$(SUPPORT)/epics-base" >> "$(SUPPORT)/configure/RELEASE"
+	echo "AUTOSAVE=$(SUPPORT)/autosave" >> "$(SUPPORT)/configure/RELEASE"
+	echo "BUSY=$(SUPPORT)/busy" >> "$(SUPPORT)/configure/RELEASE"
+	echo "CALC=$(SUPPORT)/calc" >> "$(SUPPORT)/configure/RELEASE"
+	echo "SSCAN=$(SUPPORT)/sscan" >> "$(SUPPORT)/configure/RELEASE"
+	echo "DEVIOCSTATS=$(SUPPORT)/iocStats" >> "$(SUPPORT)/configure/RELEASE"
+	echo "SNCSEQ=$(SUPPORT)/seq" >> "$(SUPPORT)/configure/RELEASE"
+	echo "AREA_DETECTOR=$(SUPPORT)/areaDetector" >> "$(SUPPORT)/configure/RELEASE"
 	$(PERL) configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 	$(SED) -i 's/^IPAC/#IPAC/g' $(RELEASE_FILES)
 	$(SED) -i 's/^SNCSEQ/#SNCSEQ/g' $(RELEASE_FILES)
