@@ -1,0 +1,10 @@
+SUPPORT=/home/swilkins/Repos/epics
+ASYN=$(SUPPORT)/asyn
+EPICS_BASE=$(SUPPORT)/epics-base
+AUTOSAVE=$(SUPPORT)/autosave
+BUSY=$(SUPPORT)/busy
+CALC=$(SUPPORT)/calc
+SSCAN=$(SUPPORT)/sscan
+IOCSTATS=$(SUPPORT)/iocStats
+#SNCSEQ=$(SUPPORT)/xxx
+IPAC=xxx

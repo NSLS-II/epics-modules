@@ -1,0 +1,24 @@
+[submodule "asyn"]
+	path = asyn
+	url = git@github.com:epics-modules/asyn.git
+[submodule "sscan"]
+	path = sscan
+	url = git@github.com:epics-modules/sscan.git
+[submodule "iocStats"]
+	path = iocStats
+	url = git@github.com:epics-modules/iocStats.git
+[submodule "calc"]
+	path = calc
+	url = git@github.com:epics-modules/calc.git
+[submodule "busy"]
+	path = busy
+	url = git@github.com:epics-modules/busy.git
+[submodule "autosave"]
+	path = autosave
+	url = git@github.com:epics-modules/autosave.git
+[submodule "epics-base"]
+	path = epics-base
+	url = git@github.com:epics-base/epics-base.git
+[submodule "seq"]
+	path = seq
+	url = git@github.com:epicsdeb/seq.git
