@@ -34,7 +34,7 @@ $(foreach mod, $(MODULE_LIST), $(eval $(call set_release,$(mod)) ))
 
 .PHONY: release base asyn calc sscan busy autosave iocstats clean update
 
-all: release base asyn calc sscan busy autosave iocstats areadetector
+all: base asyn calc sscan busy autosave iocstats areadetector
 .PHONY : all
 
 base:
@@ -77,6 +77,18 @@ areadetector: base asyn calc sscan busy autosave iocstats
 	$(MAKE) -C $(AREA_DETECTOR)
 
 release:
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_CONFIG_SITE.local \
+		      $(AREA_DETECTOR)/configure/CONFIG_SITE.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
+		      $(AREA_DETECTOR)/configure/RELEASE.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
+		      $(AREA_DETECTOR)/configure/RELEASE.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_SUPPORT.local \
+		      $(AREA_DETECTOR)/configure/RELEASE_SUPPORT.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_LIBS.local \
+		      $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_PRODS.local \
+		      $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
 	$(PERL) configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 	$(SED) -i 's/^IPAC/#IPAC/g' $(RELEASE_FILES)
 	$(SED) -i 's/^SNCSEQ/#SNCSEQ/g' $(RELEASE_FILES)
