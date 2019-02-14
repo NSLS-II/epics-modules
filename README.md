@@ -17,25 +17,7 @@ not use sed.
 
 ## Getting started
 
-To build, first edit the file `configure/RELEASE`. An example is below:
-
-```
-SUPPORT=/home/swilkins/Repos/epics
-ASYN=$(SUPPORT)/asyn
-EPICS_BASE=$(SUPPORT)/epics-base
-AUTOSAVE=$(SUPPORT)/autosave
-BUSY=$(SUPPORT)/busy
-CALC=$(SUPPORT)/calc
-SSCAN=$(SUPPORT)/sscan
-DEVIOCSTATS=$(SUPPORT)/iocStats
-SNCSEQ=$(SUPPORT)/seq
-AREA_DETECTOR=$(SUPPORT)/areaDetector
-```
-
-The only line which needs changing is the `SUPPORT` definition, this should be changed to 
-the top level directory of the whole repository. 
-
-Once this is completed, execute the command:
+To update the repository, execute the command:
 ```
 make update
 ```
