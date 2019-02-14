@@ -6,5 +6,4 @@ BUSY=$(SUPPORT)/busy
 CALC=$(SUPPORT)/calc
 SSCAN=$(SUPPORT)/sscan
 IOCSTATS=$(SUPPORT)/iocStats
-#SNCSEQ=$(SUPPORT)/xxx
-IPAC=xxx
+SNCSEQ=$(SUPPORT)/seq
