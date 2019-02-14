@@ -15,6 +15,9 @@ addons:
 #    - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
 
 script:
+  - git fetch --unshallow
+  - git submodule foreach git fetch --unshalow
+  - git submodule update --recursive --remote
   - make update
   - make release
 
