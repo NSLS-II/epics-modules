@@ -24,26 +24,25 @@ GIT=git
 CP=cp
 
 define set_release
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE)
-  # areaDetector has differently named RELEASE files
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_BASE.local)
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_BASE.local.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_BASE.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_SUPPORT.local)
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_SUPPORT.local.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_SUPPORT.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PATHS.local)
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PATHS.local.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PATHS.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_LIBS.local)
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_LIBS.local.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_LIBS.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PRODS.local)
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PRODS.local.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PRODS.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.local)
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.local.$(EPICS_HOST_ARCH))
-  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.$(EPICS_HOST_ARCH))
+  $(wildcard $($(1))/configure/RELEASE) \
+  $(wildcard $($(1))/configure/RELEASE_BASE.local) \
+  $(wildcard $($(1))/configure/RELEASE_BASE.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_BASE.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_SUPPORT.local) \
+  $(wildcard $($(1))/configure/RELEASE_SUPPORT.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_SUPPORT.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_PATHS.local) \
+  $(wildcard $($(1))/configure/RELEASE_PATHS.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_PATHS.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_LIBS.local) \
+  $(wildcard $($(1))/configure/RELEASE_LIBS.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_LIBS.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_PRODS.local) \
+  $(wildcard $($(1))/configure/RELEASE_PRODS.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE_PRODS.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE.local) \
+  $(wildcard $($(1))/configure/RELEASE.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $($(1))/configure/RELEASE.$(EPICS_HOST_ARCH)) 
 endef
 
 MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS AREA_DETECTOR
@@ -80,7 +79,7 @@ iocstats: base
 areadetector: base asyn calc sscan busy autosave iocstats
 	$(MAKE) -C $(AREA_DETECTOR)
 
-release:
+.release_areadetector:
 	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_CONFIG_SITE.local \
 		      $(AREA_DETECTOR)/configure/CONFIG_SITE.local
 	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
@@ -93,9 +92,13 @@ release:
 		      $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
 	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_PRODS.local \
 		      $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
+
+.release_setvar: .release_areadetector
+	$(eval RELEASE_FILES := $(foreach mod, $(MODULE_LIST), $(call set_release,$(mod)) ))
+
+release: .release_setvar
 	echo "SUPPORT=${SUPPORT}" > "$(SUPPORT)/configure/RELEASE"
 	cat "${SUPPORT}/configure/RELEASE.template" >> "$(SUPPORT)/configure/RELEASE"
-	$(foreach mod, $(MODULE_LIST), $(eval $(call set_release,$(mod)) ))
 	$(PERL) configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 	$(SED) -i 's/^IPAC/#IPAC/g' $(RELEASE_FILES)
 	$(SED) -i 's/^SNCSEQ/#SNCSEQ/g' $(RELEASE_FILES)
@@ -115,5 +118,11 @@ clean:
 	$(MAKE) -C $(DEVIOCSTATS) clean
 	$(MAKE) -C $(AREA_DETECTOR) clean
 	rm -rf configure/RELEASE
+	rm -rf $(AREA_DETECTOR)/configure/CONFIG_SITE.local
+	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local
+	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local
+	rm -rf $(AREA_DETECTOR)/configure/RELEASE_SUPPORT.local
+	rm -rf $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
+	rm -rf $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
 	
 
