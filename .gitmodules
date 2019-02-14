@@ -19,6 +19,3 @@
 [submodule "epics-base"]
 	path = epics-base
 	url = git@github.com:epics-base/epics-base.git
-[submodule "seq"]
-	path = seq
-	url = git@github.com:epicsdeb/seq.git

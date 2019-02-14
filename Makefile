@@ -9,29 +9,28 @@ define set_release
 endef
 
 MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN IOCSTATS
-MODULE_LIST += SNCSEQ IPAC
 
 $(foreach mod, $(MODULE_LIST), $(eval $(call set_release,$(mod)) ))
 
 $(info MODULE_LIST is ${MODULE_LIST})
 
-.PHONY: release base asyn seq calc sscan busy autosave iocstats clean
+.PHONY: release base asyn calc sscan busy autosave iocstats clean
 
-all: release base asyn seq calc sscan busy autosave iocstats
+all: release base asyn calc sscan busy autosave iocstats
 
 base:
 	$(MAKE) -C $(EPICS_BASE)
 
-seq: base
-	$(MAKE) -C $(SNCSEQ)
+#seq: base
+#	$(MAKE) -C $(SNCSEQ)
 
-asyn: base seq
+asyn: base
 	$(MAKE) -C $(ASYN)
 
 calc: base sscan
 	$(MAKE) -C $(CALC)
 
-sscan: base seq
+sscan: base
 	$(MAKE) -C $(SSCAN)
 
 busy: base asyn autosave
@@ -46,7 +45,8 @@ iocstats: base
 release:
 	$(PERL) configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 	$(SED) -i 's/^IPAC/#IPAC/g' $(RELEASE_FILES)
-	#$(SED) -i 's/^SNCSEQ/#SNCSEQ/g' $(RELEASE_FILES)
+	$(SED) -i 's/^SNCSEQ/#SNCSEQ/g' $(RELEASE_FILES)
+	$(SED) -i 's/^MAKE_TEST_IOC_APP/#MAKE_TEST_IOC_APP/g' $(IOCSTATS)/configure/RELEASE
 
 clean:
 	$(MAKE) -C $(EPICS_BASE) clean
