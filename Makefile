@@ -105,7 +105,7 @@ release: .release_setvar
 	$(SED) -i 's/^MAKE_TEST_IOC_APP/#MAKE_TEST_IOC_APP/g' $(DEVIOCSTATS)/configure/RELEASE
 
 update:
-	$(GIT) submodule update --init --recursive
+	$(GIT) submodule update --init --recursive -remote
 
 clean:
 	$(MAKE) -C $(EPICS_BASE) clean

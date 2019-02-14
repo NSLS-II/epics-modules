@@ -15,6 +15,7 @@ cache:
     - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
 
 script:
+  - make update
   - make release
   - cp -v ci/AREA_DETECTOR_RELEASE.local areaDetector/configure/RELEASE.local
   - make
