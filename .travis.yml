@@ -6,17 +6,16 @@ addons:
     packages:
       - perl
       - re2c
-      - autoconf  # pvaPy
-      - libboost-all-dev  # pvaPy
-      - procserv  # optional, used by ci-scripts/run-epics-iocs-on-procserv.sh
+      - autoconf
+      - libboost-all-dev
+      - procserv
 
-#cache:
-#  directories:
-#    - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
+cache:
+  directories:
+    - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
 
 script:
-  - git fetch --unshallow || true
-  - git submodule foreach git fetch --unshallow
   - make release
+  - cp -v ci/AREA_DETECTOR_RELEASE.local areaDetector/configure/RELEASE.local
   - make
 
