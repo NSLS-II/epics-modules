@@ -1,3 +1,10 @@
+# Set the SUPPORT Directory (from this makefile)
+MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+SUPPORT := $(dir $(MKFILE_PATH))
+$(info MKFILE_PATH=${MKFILE_PATH})
+$(info SUPPORT=${SUPPORT})
+
+# Include overrides
 include configure/RELEASE
 
 MASTER_FILE=configure/RELEASE

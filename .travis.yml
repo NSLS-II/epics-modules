@@ -1,0 +1,20 @@
+language: cpp
+
+dist: trusty
+addons:
+  apt:
+    packages:
+      - perl
+      - re2c
+      - autoconf  # pvaPy
+      - libboost-all-dev  # pvaPy
+      - procserv  # optional, used by ci-scripts/run-epics-iocs-on-procserv.sh
+
+#cache:
+#  directories:
+#    - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
+
+script:
+  - make update
+  - make release
+
