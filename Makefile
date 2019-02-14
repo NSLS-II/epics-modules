@@ -1,9 +1,10 @@
-MASTER_FILE=configure/RELEASE
-PERL=/usr/bin/perl
-SED=/bin/sed
-GIT=/usr/bin/git
-
 include configure/RELEASE
+
+MASTER_FILE=configure/RELEASE
+PERL=perl
+SED=sed
+GIT=git
+CP=cp
 
 define set_release
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE)
@@ -29,15 +30,12 @@ define set_release
 endef
 
 MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS AREA_DETECTOR
-
 $(foreach mod, $(MODULE_LIST), $(eval $(call set_release,$(mod)) ))
-
-$(info MODULE_LIST is ${MODULE_LIST})
-$(info RELEASE_FILES are ${RELEASE_FILES})
 
 .PHONY: release base asyn calc sscan busy autosave iocstats clean update
 
-all: release base asyn calc sscan busy autosave iocstats
+all: release base asyn calc sscan busy autosave iocstats areadetector
+.PHONY : all
 
 base:
 	$(MAKE) -C $(EPICS_BASE)
@@ -63,7 +61,19 @@ autosave: base
 iocstats: base
 	$(MAKE) -C $(DEVIOCSTATS)
 
-areadetector: base asyn calc sscan busy autosaveiocstats
+areadetector: base asyn calc sscan busy autosave iocstats
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_CONFIG_SITE.local \
+		      $(AREA_DETECTOR)/configure/CONFIG_SITE.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
+		      $(AREA_DETECTOR)/configure/RELEASE.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
+		      $(AREA_DETECTOR)/configure/RELEASE.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_SUPPORT.local \
+		      $(AREA_DETECTOR)/configure/RELEASE_SUPPORT.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_LIBS.local \
+		      $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
+	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_PRODS.local \
+		      $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
 	$(MAKE) -C $(AREA_DETECTOR)
 
 release:
