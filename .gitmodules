@@ -19,3 +19,6 @@
 [submodule "epics-base"]
 	path = epics-base
 	url = git@github.com:epics-base/epics-base.git
+[submodule "areaDetector"]
+	path = areaDetector
+	url = git@github.com:areaDetector/areaDetector.git
