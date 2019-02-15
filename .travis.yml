@@ -17,5 +17,5 @@ script:
   - make release
   - cat configure/RELEASE
   - cp -v ci/AREA_DETECTOR_RELEASE.local areaDetector/configure/RELEASE.local
-  - make
+  - make areadetector
 
