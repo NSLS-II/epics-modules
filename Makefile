@@ -104,14 +104,8 @@ release: .release_setvar
 
 update:
 	$(GIT) submodule foreach "git stash || true"
-	cd $(AREA_DETECTOR) && $(GIT) submodule update --init --recursive --remote
-	cd $(EPICS_BASE) && $(GIT) checkout 7.0 && $(GIT) pull origin 7.0
-	cd $(ASYN) && $(GIT) checkout master && $(GIT) pull origin master
-	cd $(CALC) && $(GIT) checkout master && $(GIT) pull origin master
-	cd $(SSCAN) && $(GIT) checkout master && $(GIT) pull origin master
-	cd $(BUSY) && $(GIT) checkout master && $(GIT) pull origin master
-	cd $(AUTOSAVE) && $(GIT) checkout master && $(GIT) pull origin master
-	cd $(DEVIOCSTATS) && $(GIT) checkout master && $(GIT) pull origin master
+	$(GIT) pull --recurse-submodules
+	cd "$(AREA_DETECTOR)" && $(GIT) submodule update --init --recursive --remote
 	$(GIT) submodule foreach "git stash pop || true"
 
 clean:
