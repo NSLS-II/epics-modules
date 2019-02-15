@@ -12,6 +12,7 @@ DEVIOCSTATS=$(SUPPORT)/iocStats
 SNCSEQ=$(SUPPORT)/seq
 AREA_DETECTOR=$(SUPPORT)/areaDetector
 MOTOR=$(SUPPORT)/motor
+MODBUS=$(SUPPORT)/modbus
 
 # Include overrides
 #include configure/RELEASE
@@ -44,11 +45,11 @@ define set_release
   $(wildcard $($(1))/configure/RELEASE.$(EPICS_HOST_ARCH)) 
 endef
 
-MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS AREA_DETECTOR MOTOR
+MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS AREA_DETECTOR MOTOR MODBUS
 
-.PHONY: release base asyn calc sscan busy autosave iocstats clean update
+.PHONY: release base asyn calc sscan busy autosave iocstats motor modbus areadetector clean update
 
-all: base asyn calc sscan busy autosave iocstats motor areadetector
+all: base asyn calc sscan busy autosave iocstats motor modbus areadetector
 .PHONY : all
 
 base:
@@ -77,6 +78,9 @@ iocstats: base
 
 motor: base asyn
 	$(MAKE) -C $(MOTOR)
+
+modbus: base asyn
+	$(MAKE) -C $(MODBUS)
 
 areadetector: base asyn calc sscan busy autosave iocstats
 	$(MAKE) -C $(AREA_DETECTOR)

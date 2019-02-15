@@ -25,3 +25,6 @@
 [submodule "motor"]
 	path = motor
 	url = https://github.com/epics-modules/motor.git
+[submodule "modbus"]
+	path = modbus
+	url = https://github.com/epics-modules/modbus.git
