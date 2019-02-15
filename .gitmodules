@@ -28,3 +28,6 @@
 [submodule "modbus"]
 	path = modbus
 	url = https://github.com/epics-modules/modbus.git
+[submodule "stream"]
+	path = stream
+	url = https://github.com/epics-modules/stream.git
