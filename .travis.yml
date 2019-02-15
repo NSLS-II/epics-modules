@@ -9,6 +9,7 @@ addons:
       - autoconf
       - libboost-all-dev
       - procserv
+      - libpcre3-dev
 
 script:
   - set -e

@@ -9,3 +9,4 @@ SNCSEQ=$(SUPPORT)/seq
 AREA_DETECTOR=$(SUPPORT)/areaDetector
 MOTOR=$(SUPPORT)/motor
 MODBUS=$(SUPPORT)/modbus
+STREAM=$(SUPPORT)/stream

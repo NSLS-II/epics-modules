@@ -13,9 +13,7 @@ SNCSEQ=$(SUPPORT)/seq
 AREA_DETECTOR=$(SUPPORT)/areaDetector
 MOTOR=$(SUPPORT)/motor
 MODBUS=$(SUPPORT)/modbus
-
-# Include overrides
-#include configure/RELEASE
+STREAM=$(SUPPORT)/stream
 
 MASTER_FILE=configure/RELEASE
 PERL=perl
@@ -45,11 +43,14 @@ define set_release
   $(wildcard $($(1))/configure/RELEASE.$(EPICS_HOST_ARCH)) 
 endef
 
-MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS AREA_DETECTOR MOTOR MODBUS
+MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS \
+			  AREA_DETECTOR MOTOR MODBUS STREAM
 
-.PHONY: release base asyn calc sscan busy autosave iocstats motor modbus areadetector clean update
+.PHONY: release base asyn calc sscan busy autosave \
+	    iocstats motor modbus stream areadetector \
+		clean update
 
-all: base asyn calc sscan busy autosave iocstats motor modbus areadetector
+all: base asyn calc sscan busy autosave iocstats motor modbus stream areadetector
 .PHONY : all
 
 base:
@@ -81,6 +82,9 @@ motor: base asyn
 
 modbus: base asyn
 	$(MAKE) -C $(MODBUS)
+
+stream: base asyn
+	$(MAKE) -C $(STREAM)
 
 areadetector: base asyn calc sscan busy autosave iocstats
 	$(MAKE) -C $(AREA_DETECTOR)
@@ -128,6 +132,8 @@ clean:
 	$(MAKE) -C $(DEVIOCSTATS) clean
 	$(MAKE) -C $(AREA_DETECTOR) clean
 	$(MAKE) -C $(MOTOR) clean
+	$(MAKE) -C $(MODBUS) clean
+	$(MAKE) -C $(STREAM) clean
 	rm -rf configure/RELEASE
 	rm -rf $(AREA_DETECTOR)/configure/CONFIG_SITE.local
 	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local
