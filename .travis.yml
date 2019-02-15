@@ -11,6 +11,7 @@ addons:
       - procserv
 
 script:
+  - set -e
   - make update
   - make release
   - cp -v ci/AREA_DETECTOR_RELEASE.local areaDetector/configure/RELEASE.local

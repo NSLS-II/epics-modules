@@ -1,9 +1,7 @@
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-SUPPORT := $(dir $(MKFILE_PATH))
-$(info MKFILE_PATH=${MKFILE_PATH})
-$(info SUPPORT=${SUPPORT})
 
+SUPPORT := $(dir $(MKFILE_PATH))
 ASYN=$(SUPPORT)/asyn
 EPICS_BASE=$(SUPPORT)/epics-base
 AUTOSAVE=$(SUPPORT)/autosave
@@ -105,7 +103,16 @@ release: .release_setvar
 	$(SED) -i 's/^MAKE_TEST_IOC_APP/#MAKE_TEST_IOC_APP/g' $(DEVIOCSTATS)/configure/RELEASE
 
 update:
-	$(GIT) submodule update --init --recursive -remote
+	$(GIT) submodule foreach "git stash || true"
+	cd $(EPICS_BASE) && $(GIT) pull origin 7.0
+	cd $(ASYN) && $(GIT) pull origin master
+	cd $(CALC) && $(GIT) pull origin master
+	cd $(SSCAN) && $(GIT) pull origin master
+	cd $(BUSY) && $(GIT) pull origin master
+	cd $(AUTOSAVE) && $(GIT) pull origin master
+	cd $(DEVIOCSTATS) && $(GIT) pull origin master
+	cd $(AREA_DETECTOR) && $(GIT) submodule update --init --recursive --remote
+	$(GIT) submodule foreach "git stash pop || true"
 
 clean:
 	$(MAKE) -C $(EPICS_BASE) clean
