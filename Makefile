@@ -104,6 +104,7 @@ release: .release_setvar
 
 update:
 	#$(GIT) submodule foreach "git stash || true"
+	$(GIT) submodule update --init --recursive
 	$(GIT) pull --recurse-submodules
 	cd "$(AREA_DETECTOR)" && $(GIT) submodule update --init --recursive --remote
 	#$(GIT) submodule foreach "git stash pop || true"
