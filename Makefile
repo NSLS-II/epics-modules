@@ -103,10 +103,10 @@ release: .release_setvar
 	$(SED) -i 's/^MAKE_TEST_IOC_APP/#MAKE_TEST_IOC_APP/g' $(DEVIOCSTATS)/configure/RELEASE
 
 update:
-	$(GIT) submodule foreach "git stash || true"
+	#$(GIT) submodule foreach "git stash || true"
 	$(GIT) pull --recurse-submodules
 	cd "$(AREA_DETECTOR)" && $(GIT) submodule update --init --recursive --remote
-	$(GIT) submodule foreach "git stash pop || true"
+	#$(GIT) submodule foreach "git stash pop || true"
 
 clean:
 	$(MAKE) -C $(EPICS_BASE) clean
