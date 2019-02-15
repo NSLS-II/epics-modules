@@ -103,6 +103,7 @@ release: .release_setvar
 	$(SED) -i 's/^MAKE_TEST_IOC_APP/#MAKE_TEST_IOC_APP/g' $(DEVIOCSTATS)/configure/RELEASE
 
 update:
+	cd $(AREA_DETECTOR) && $(GIT) submodule update --init --recursive
 	$(GIT) submodule foreach "git stash || true"
 	cd $(EPICS_BASE) && $(GIT) pull origin 7.0
 	cd $(ASYN) && $(GIT) pull origin master
@@ -111,7 +112,6 @@ update:
 	cd $(BUSY) && $(GIT) pull origin master
 	cd $(AUTOSAVE) && $(GIT) pull origin master
 	cd $(DEVIOCSTATS) && $(GIT) pull origin master
-	cd $(AREA_DETECTOR) && $(GIT) submodule update --init --recursive --remote
 	$(GIT) submodule foreach "git stash pop || true"
 
 clean:
