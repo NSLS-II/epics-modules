@@ -10,10 +10,6 @@ addons:
       - libboost-all-dev
       - procserv
 
-cache:
-  directories:
-    - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
-
 script:
   - make update
   - make release
