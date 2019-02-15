@@ -31,3 +31,12 @@
 [submodule "stream"]
 	path = stream
 	url = https://github.com/epics-modules/stream.git
+[submodule "quadEM"]
+	path = quadEM
+	url = https://github.com/epics-modules/quadEM.git
+[submodule "ipac"]
+	path = ipac
+	url = https://github.com/epics-modules/ipac.git
+[submodule "ipUnidig"]
+	path = ipUnidig
+	url = https://github.com/epics-modules/ipUnidig.git

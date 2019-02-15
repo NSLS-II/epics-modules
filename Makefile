@@ -14,6 +14,9 @@ AREA_DETECTOR=$(SUPPORT)/areaDetector
 MOTOR=$(SUPPORT)/motor
 MODBUS=$(SUPPORT)/modbus
 STREAM=$(SUPPORT)/stream
+QUADEM=$(SUPPORT)/quadEM
+IPAC=$(SUPPORT)/ipac
+IPUNIDIG=$(SUPPORT)/ipUnidig
 
 MASTER_FILE=configure/RELEASE
 PERL=perl
@@ -44,13 +47,16 @@ define set_release
 endef
 
 MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS \
-			  AREA_DETECTOR MOTOR MODBUS STREAM
+			  AREA_DETECTOR MOTOR MODBUS STREAM QUADEM \
+			  IPAC IPUNIDIG
 
 .PHONY: release base asyn calc sscan busy autosave \
 	    iocstats motor modbus stream areadetector \
-		clean update
+		ipac quadem ipunidig clean update
 
-all: base asyn calc sscan busy autosave iocstats motor modbus stream areadetector
+all: base asyn calc sscan busy autosave iocstats \
+	 motor modbus stream areadetector ipac \
+	 ipunidig
 .PHONY : all
 
 base:
@@ -77,14 +83,23 @@ autosave: base
 iocstats: base
 	$(MAKE) -C $(DEVIOCSTATS)
 
-motor: base asyn
+motor: base asyn ipac
 	$(MAKE) -C $(MOTOR)
 
 modbus: base asyn
 	$(MAKE) -C $(MODBUS)
 
-stream: base asyn
+stream: base asyn ipac
 	$(MAKE) -C $(STREAM)
+
+quadem: base ipac areadetector 
+	$(MAKE) -C $(QUADEM)
+
+ipac: base 
+	$(MAKE) -C $(IPAC) 
+
+ipunidig: base ipac
+	$(MAKE) -C $(IPUNIDIG)
 
 areadetector: base asyn calc sscan busy autosave iocstats
 	$(MAKE) -C $(AREA_DETECTOR)
@@ -110,7 +125,7 @@ release: .release_setvar
 	echo "SUPPORT=${SUPPORT}" > "$(SUPPORT)/configure/RELEASE"
 	cat "${SUPPORT}/configure/RELEASE.template" >> "$(SUPPORT)/configure/RELEASE"
 	$(PERL) configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
-	$(SED) -i 's/^IPAC/#IPAC/g' $(RELEASE_FILES)
+	#$(SED) -i 's/^IPAC/#IPAC/g' $(RELEASE_FILES)
 	$(SED) -i 's/^SNCSEQ/#SNCSEQ/g' $(RELEASE_FILES)
 	$(SED) -i 's/^MAKE_TEST_IOC_APP/#MAKE_TEST_IOC_APP/g' $(DEVIOCSTATS)/configure/RELEASE
 
@@ -131,9 +146,12 @@ clean:
 	$(MAKE) -C $(AUTOSAVE) clean
 	$(MAKE) -C $(DEVIOCSTATS) clean
 	$(MAKE) -C $(AREA_DETECTOR) clean
-	$(MAKE) -C $(MOTOR) clean
+	#$(MAKE) -C $(MOTOR) clean
 	$(MAKE) -C $(MODBUS) clean
 	$(MAKE) -C $(STREAM) clean
+	$(MAKE) -C $(IPAC) clean
+	$(MAKE) -C $(IPUNIDIG) clean
+	$(MAKE) -C $(QUADEM) clean
 	rm -rf configure/RELEASE
 	rm -rf $(AREA_DETECTOR)/configure/CONFIG_SITE.local
 	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local
