@@ -42,17 +42,19 @@ define set_release
   $(wildcard $(1)/configure/RELEASE.$(EPICS_HOST_ARCH)) 
 endef
 
-MODULE_DIRS = areaDetector asyn asutosave busy calc epics-base iocStats \
-			  ipUnidig ipac modbus motor quadEM sscan stream
+MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
+			  ipUnidig ipac modbus motor sscan stream
+
+MODULE_DIRS_CLEAN = $(addsuffix clean,$(MODULE_DIRS))
+$(info $(MODULE_DIRS_CLEAN))
 
 .PHONY: all
 all: $(MODULE_DIRS)
 
-.PHONY: $(MODULE_DIRS)
-$(MODULE_DIRS):
-	$(MAKE) -C $@
+.PHONY: clean
+clean: $(MODULE_DIRS_CLEAN)
 
-asyn: epics-base
+asyn: epics-base ipac
 
 calc: epics-base sscan
 
@@ -70,13 +72,17 @@ modbus: epics-base asyn
 
 stream: epics-base asyn ipac
 
-quadem: epics-base ipac areaDetector 
+quadEM: epics-base ipac areaDetector 
 
 ipac: epics-base 
 
 ipUnidig: epics-base ipac
 
-areaDetector: epics-base asyn calc sscan busy autosave iocstats
+areaDetector: epics-base asyn calc sscan busy autosave iocStats
+
+.PHONY: $(MODULE_DIRS)
+$(MODULE_DIRS):
+	$(MAKE) -C $@
 
 .PHONY: .release_areadetector
 .release_areadetector:
@@ -97,9 +103,11 @@ areaDetector: epics-base asyn calc sscan busy autosave iocstats
 release: .release_areadetector
 	$(eval RELEASE_FILES := $(foreach mod, $(MODULE_DIRS), $(call set_release,$(mod)) ))
 	echo "SUPPORT=${SUPPORT}" > "$(SUPPORT)/configure/RELEASE"
+	echo "EPICS_BASE=${SUPPORT}/epics-base" >> "$(SUPPORT)/configure/RELEASE"
 	cat "${SUPPORT}/configure/RELEASE.template" >> "$(SUPPORT)/configure/RELEASE"
+	configure/modify_release.py SNCSEQ UNSET $(RELEASE_FILES)
 	configure/make_release.py "$(SUPPORT)/configure/RELEASE" $(RELEASE_FILES)
-	configure/modify_release.py $(DEVIOCSTATS)/configure/RELEASE MAKE_TEST_IOC_APP UNSET
+	configure/modify_release.py MAKE_TEST_IOC_APP UNSET "$(DEVIOCSTATS)/configure/RELEASE"
 
 .PHONY: update
 update:
@@ -122,23 +130,11 @@ update:
 	cd "$(STREAM)/StreamDevice" && git fetch origin master && git checkout master
 	cd "$(AREA_DETECTOR)" && git submodule update --init --recursive --remote
 
-.PHONY: clean
-clean:
-	$(MAKE) -C $(AREA_DETECTOR) clean
-	$(MAKE) -C $(ASYN) clean
-	$(MAKE) -C $(AUTOSAVE) clean
-	$(MAKE) -C $(BUSY) clean
-	$(MAKE) -C $(CALC) clean
-	$(MAKE) -C $(EPICS_BASE) clean
-	$(MAKE) -C $(DEVIOCSTATS) clean
-	$(MAKE) -C $(IPUNIDIG) clean
-	$(MAKE) -C $(IPAC) clean
-	$(MAKE) -C $(MODBUS) clean
-	$(MAKE) -C $(MOTOR) clean
-	$(MAKE) -C $(QUADEM) clean
-	#$(MAKE) -C $(SNCSEQ) clean
-	$(MAKE) -C $(SSCAN) clean
-	$(MAKE) -C $(STREAM) clean
+%clean:
+	$(MAKE) -C $(patsubst %clean,%,$@) clean
+
+.PHONY: .clean_release
+.clean_release:
 	rm -rf configure/RELEASE
 	rm -rf $(AREA_DETECTOR)/configure/CONFIG_SITE.local
 	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local

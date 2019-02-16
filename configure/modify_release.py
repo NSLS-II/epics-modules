@@ -44,16 +44,19 @@ def modify_release(filename, token, unset=True, val=None):
                 continue
 
             tok = tokens[0].strip()
-            tok = tok.replace('#', '')
-            if tok == token:
+            if tok.replace('#', '') == token:
                 if val is None:
-                    if unset:
+                    if unset and (tok[0] != '#'):
                         print('---- Unsetting {}'.format(tok))
                         ouf.write('#{}'.format(line))
-                    else:
+                        continue
+                    
+                    if unset is False:
                         print('---- Setting {}'.format(tok))
-                        ouf.write('{}={}\n'.format(tok, tokens[1]))
-                else:
+                        ouf.write('{}={}\n'.format(tok.replace('#',''), tokens[1]))
+                        continue
+                
+                if tok[0] != '#':
                     print('---- Modifying {} to {}'.format(tok, val))
                     ouf.write('{}={}\n'.format(tok, val))
             else:
@@ -61,11 +64,11 @@ def modify_release(filename, token, unset=True, val=None):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if len(sys.argv) < 4:
         sys.exit(127)
-    filename = sys.argv[1]
-    token = sys.argv[2]
-    val = sys.argv[3]
+    token = sys.argv[1]
+    val = sys.argv[2]
+    filenames = sys.argv[3:]
     unset = False
 
     if val == 'UNSET':
@@ -75,4 +78,5 @@ if __name__ == "__main__":
         val = None
         unset = False
 
-    modify_release(filename, token, unset, val)
+    for filename in filenames:
+        modify_release(filename, token, unset, val)

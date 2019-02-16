@@ -1,5 +1,4 @@
 ASYN=$(SUPPORT)/asyn
-EPICS_BASE=$(SUPPORT)/epics-base
 AUTOSAVE=$(SUPPORT)/autosave
 BUSY=$(SUPPORT)/busy
 CALC=$(SUPPORT)/calc
