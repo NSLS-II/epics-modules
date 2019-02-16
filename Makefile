@@ -124,10 +124,8 @@ areadetector: base asyn calc sscan busy autosave iocstats
 release: .release_setvar
 	echo "SUPPORT=${SUPPORT}" > "$(SUPPORT)/configure/RELEASE"
 	cat "${SUPPORT}/configure/RELEASE.template" >> "$(SUPPORT)/configure/RELEASE"
-	$(PERL) configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
-	#$(SED) -i 's/^IPAC/#IPAC/g' $(RELEASE_FILES)
-	$(SED) -i 's/^SNCSEQ/#SNCSEQ/g' $(RELEASE_FILES)
-	$(SED) -i 's/^MAKE_TEST_IOC_APP/#MAKE_TEST_IOC_APP/g' $(DEVIOCSTATS)/configure/RELEASE
+	configure/make_release.py "$(SUPPORT)/configure/RELEASE" $(RELEASE_FILES)
+	configure/modify_release.py $(DEVIOCSTATS)/configure/RELEASE MAKE_TEST_IOC_APP UNSET
 
 update:
 	#$(GIT) submodule foreach "git stash || true"

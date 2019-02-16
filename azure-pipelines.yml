@@ -12,8 +12,11 @@ steps:
 
 - script: |
     make update
+  displayName: 'Update git repos'
+
+- script: |
     make release
-  displayName: 'Prepare Build'
+  displayName: 'Make Release Files'
   
 - script: |
     make 
