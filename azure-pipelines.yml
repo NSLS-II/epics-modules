@@ -5,7 +5,8 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
-- script: echo Hello, world!
+- script: |
+    sudo apt-get -y install libreadline-dev
   displayName: 'Run a one-line script'
 
 - script: |
