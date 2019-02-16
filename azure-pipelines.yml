@@ -13,5 +13,8 @@ steps:
 - script: |
     make update
     make release
+  displayName: 'Prepare Build'
+  
+- script: |
     make 
-  displayName: 'Run a multi-line script'
+  displayName: 'Build epics-modules'
