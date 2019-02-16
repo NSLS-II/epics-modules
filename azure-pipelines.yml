@@ -7,7 +7,8 @@ pool:
 steps:
 - script: |
     sudo apt-get -y install libreadline-dev
-  displayName: 'Run a one-line script'
+    sudo apt-get -y install pearl re2c libboost-all-dev
+  displayName: 'Install Packages'
 
 - script: |
     make update
