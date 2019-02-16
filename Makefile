@@ -19,137 +19,126 @@ IPAC=$(SUPPORT)/ipac
 IPUNIDIG=$(SUPPORT)/ipUnidig
 
 MASTER_FILE=configure/RELEASE
-PERL=perl
-SED=sed
-GIT=git
-CP=cp
 
 define set_release
-  $(wildcard $($(1))/configure/RELEASE) \
-  $(wildcard $($(1))/configure/RELEASE_BASE.local) \
-  $(wildcard $($(1))/configure/RELEASE_BASE.local.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_BASE.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_SUPPORT.local) \
-  $(wildcard $($(1))/configure/RELEASE_SUPPORT.local.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_SUPPORT.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_PATHS.local) \
-  $(wildcard $($(1))/configure/RELEASE_PATHS.local.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_PATHS.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_LIBS.local) \
-  $(wildcard $($(1))/configure/RELEASE_LIBS.local.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_LIBS.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_PRODS.local) \
-  $(wildcard $($(1))/configure/RELEASE_PRODS.local.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE_PRODS.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE.local) \
-  $(wildcard $($(1))/configure/RELEASE.local.$(EPICS_HOST_ARCH)) \
-  $(wildcard $($(1))/configure/RELEASE.$(EPICS_HOST_ARCH)) 
+  $(wildcard $(1)/configure/RELEASE) \
+  $(wildcard $(1)/configure/RELEASE_BASE.local) \
+  $(wildcard $(1)/configure/RELEASE_BASE.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_BASE.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_SUPPORT.local) \
+  $(wildcard $(1)/configure/RELEASE_SUPPORT.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_SUPPORT.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_PATHS.local) \
+  $(wildcard $(1)/configure/RELEASE_PATHS.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_PATHS.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_LIBS.local) \
+  $(wildcard $(1)/configure/RELEASE_LIBS.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_LIBS.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_PRODS.local) \
+  $(wildcard $(1)/configure/RELEASE_PRODS.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE_PRODS.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE.local) \
+  $(wildcard $(1)/configure/RELEASE.local.$(EPICS_HOST_ARCH)) \
+  $(wildcard $(1)/configure/RELEASE.$(EPICS_HOST_ARCH)) 
 endef
 
-MODULE_LIST = ASYN AUTOSAVE BUSY CALC SSCAN DEVIOCSTATS \
-			  AREA_DETECTOR MOTOR MODBUS STREAM QUADEM \
-			  IPAC IPUNIDIG
+MODULE_DIRS = areaDetector asyn asutosave busy calc epics-base iocStats \
+			  ipUnidig ipac modbus motor quadEM sscan stream
 
-.PHONY: release base asyn calc sscan busy autosave \
-	    iocstats motor modbus stream areadetector \
-		ipac quadem ipunidig clean update
+.PHONY: all
+all: $(MODULE_DIRS)
 
-all: base asyn calc sscan busy autosave iocstats \
-	 motor modbus stream areadetector ipac \
-	 ipunidig
-.PHONY : all
+.PHONY: $(MODULE_DIRS)
+$(MODULE_DIRS):
+	$(MAKE) -C $@
 
-base:
-	$(MAKE) -C $(EPICS_BASE)
+asyn: epics-base
 
-#seq: base
-#	$(MAKE) -C $(SNCSEQ)
+calc: epics-base sscan
 
-asyn: base
-	$(MAKE) -C $(ASYN)
+sscan: epics-base
 
-calc: base sscan
-	$(MAKE) -C $(CALC)
+busy: epics-base asyn autosave
 
-sscan: base
-	$(MAKE) -C $(SSCAN)
+autosave: epics-base
 
-busy: base asyn autosave
-	$(MAKE) -C $(BUSY)
+iocStats: epics-base
 
-autosave: base
-	$(MAKE) -C $(AUTOSAVE)
+motor: epics-base asyn ipac
 
-iocstats: base
-	$(MAKE) -C $(DEVIOCSTATS)
+modbus: epics-base asyn
 
-motor: base asyn ipac
-	$(MAKE) -C $(MOTOR)
+stream: epics-base asyn ipac
 
-modbus: base asyn
-	$(MAKE) -C $(MODBUS)
+quadem: epics-base ipac areaDetector 
 
-stream: base asyn ipac
-	$(MAKE) -C $(STREAM)
+ipac: epics-base 
 
-quadem: base ipac areadetector 
-	$(MAKE) -C $(QUADEM)
+ipUnidig: epics-base ipac
 
-ipac: base 
-	$(MAKE) -C $(IPAC) 
+areaDetector: epics-base asyn calc sscan busy autosave iocstats
 
-ipunidig: base ipac
-	$(MAKE) -C $(IPUNIDIG)
-
-areadetector: base asyn calc sscan busy autosave iocstats
-	$(MAKE) -C $(AREA_DETECTOR)
-
+.PHONY: .release_areadetector
 .release_areadetector:
-	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_CONFIG_SITE.local \
+	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_CONFIG_SITE.local \
 		      $(AREA_DETECTOR)/configure/CONFIG_SITE.local
-	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
+	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
 		      $(AREA_DETECTOR)/configure/RELEASE.local
-	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
+	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
 		      $(AREA_DETECTOR)/configure/RELEASE.local
-	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_SUPPORT.local \
+	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_SUPPORT.local \
 		      $(AREA_DETECTOR)/configure/RELEASE_SUPPORT.local
-	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_LIBS.local \
+	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_LIBS.local \
 		      $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
-	$(CP) -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_PRODS.local \
+	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_PRODS.local \
 		      $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
 
-.release_setvar: .release_areadetector
-	$(eval RELEASE_FILES := $(foreach mod, $(MODULE_LIST), $(call set_release,$(mod)) ))
-
-release: .release_setvar
+.PHONY: release
+release: .release_areadetector
+	$(eval RELEASE_FILES := $(foreach mod, $(MODULE_DIRS), $(call set_release,$(mod)) ))
 	echo "SUPPORT=${SUPPORT}" > "$(SUPPORT)/configure/RELEASE"
 	cat "${SUPPORT}/configure/RELEASE.template" >> "$(SUPPORT)/configure/RELEASE"
 	configure/make_release.py "$(SUPPORT)/configure/RELEASE" $(RELEASE_FILES)
 	configure/modify_release.py $(DEVIOCSTATS)/configure/RELEASE MAKE_TEST_IOC_APP UNSET
 
+.PHONY: update
 update:
-	#$(GIT) submodule foreach "git stash || true"
-	$(GIT) submodule update --init --recursive
-	$(GIT) pull --recurse-submodules
-	cd "$(AREA_DETECTOR)" && $(GIT) submodule update --init --recursive --remote
-	#$(GIT) submodule foreach "git stash pop || true"
+	# Initialize submodules
+	git submodule update --init --recursive
+	cd "$(ASYN)" && git fetch origin master && git checkout master
+	cd "$(AUTOSAVE)" && git fetch origin master && git checkout master
+	cd "$(BUSY)" && git fetch origin master && git checkout master
+	cd "$(CALC)" && git fetch origin master && git checkout master
+	cd "$(EPICS_BASE)" && git fetch origin 7.0 && git checkout 7.0
+	cd "$(DEVIOCSTATS)" && git fetch origin master && git checkout master
+	cd "$(IPUNIDIG)" && git fetch origin master && git checkout master
+	cd "$(IPAC)" && git fetch origin master && git checkout master
+	cd "$(MODBUS)" && git fetch origin master && git checkout master
+	cd "$(MOTOR)" && git fetch origin master && git checkout master
+	cd "$(QUADEM)" && git fetch origin master && git checkout master
+	cd "$(SSCAN)" && git fetch origin master && git checkout master
+	cd "$(SSCAN)" && git fetch origin master && git checkout master
+	cd "$(STREAM)" && git fetch origin master && git checkout master
+	cd "$(STREAM)/StreamDevice" && git fetch origin master && git checkout master
+	cd "$(AREA_DETECTOR)" && git submodule update --init --recursive --remote
 
+.PHONY: clean
 clean:
-	$(MAKE) -C $(EPICS_BASE) clean
-	#$(MAKE) -C $(SNCSEQ) clean
-	$(MAKE) -C $(ASYN) clean
-	$(MAKE) -C $(CALC) clean
-	$(MAKE) -C $(SSCAN) clean
-	$(MAKE) -C $(BUSY) clean
-	$(MAKE) -C $(AUTOSAVE) clean
-	$(MAKE) -C $(DEVIOCSTATS) clean
 	$(MAKE) -C $(AREA_DETECTOR) clean
-	#$(MAKE) -C $(MOTOR) clean
-	$(MAKE) -C $(MODBUS) clean
-	$(MAKE) -C $(STREAM) clean
-	$(MAKE) -C $(IPAC) clean
+	$(MAKE) -C $(ASYN) clean
+	$(MAKE) -C $(AUTOSAVE) clean
+	$(MAKE) -C $(BUSY) clean
+	$(MAKE) -C $(CALC) clean
+	$(MAKE) -C $(EPICS_BASE) clean
+	$(MAKE) -C $(DEVIOCSTATS) clean
 	$(MAKE) -C $(IPUNIDIG) clean
+	$(MAKE) -C $(IPAC) clean
+	$(MAKE) -C $(MODBUS) clean
+	$(MAKE) -C $(MOTOR) clean
 	$(MAKE) -C $(QUADEM) clean
+	#$(MAKE) -C $(SNCSEQ) clean
+	$(MAKE) -C $(SSCAN) clean
+	$(MAKE) -C $(STREAM) clean
 	rm -rf configure/RELEASE
 	rm -rf $(AREA_DETECTOR)/configure/CONFIG_SITE.local
 	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local
@@ -157,5 +146,3 @@ clean:
 	rm -rf $(AREA_DETECTOR)/configure/RELEASE_SUPPORT.local
 	rm -rf $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
 	rm -rf $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
-	
-
