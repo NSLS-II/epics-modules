@@ -51,9 +51,6 @@ $(info $(MODULE_DIRS_CLEAN))
 .PHONY: all
 all: $(MODULE_DIRS)
 
-.PHONY: clean
-clean: $(MODULE_DIRS_CLEAN)
-
 asyn: epics-base ipac
 
 calc: epics-base sscan
@@ -109,6 +106,10 @@ release: .release_areadetector
 	configure/make_release.py "$(SUPPORT)/configure/RELEASE" $(RELEASE_FILES)
 	configure/modify_release.py MAKE_TEST_IOC_APP UNSET "$(DEVIOCSTATS)/configure/RELEASE"
 
+#
+## Update all git repos to their master (or equivalent)
+#
+
 .PHONY: update
 update:
 	# Initialize submodules
@@ -130,11 +131,23 @@ update:
 	cd "$(STREAM)/StreamDevice" && git fetch origin master && git checkout master
 	cd "$(AREA_DETECTOR)" && git submodule update --init --recursive --remote
 
-%clean:
+
+#
+## Clean up by running "make clean" in all modules and deleting the areadetector
+## local files
+#
+
+.PHONY: clean
+clean: clean_release
+
+.PHONY: clean_modules
+clean_modules: $(MODULE_DIRS_CLEAN)
+
+%clean: 
 	$(MAKE) -C $(patsubst %clean,%,$@) clean
 
-.PHONY: .clean_release
-.clean_release:
+.PHONY: clean_release
+clean_release: clean_modules
 	rm -rf configure/RELEASE
 	rm -rf $(AREA_DETECTOR)/configure/CONFIG_SITE.local
 	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local

@@ -44,18 +44,19 @@ def modify_release(filename, token, unset=True, val=None):
                 continue
 
             tok = tokens[0].strip()
-            if tok.replace('#', '') == token:
+            _tok = tok.replace('#', '')
+            if _tok == token:
                 if val is None:
                     if unset and (tok[0] != '#'):
                         print('---- Unsetting {}'.format(tok))
                         ouf.write('#{}'.format(line))
                         continue
-                    
+
                     if unset is False:
-                        print('---- Setting {}'.format(tok))
-                        ouf.write('{}={}\n'.format(tok.replace('#',''), tokens[1]))
+                        print('---- Setting {}'.format(_tok))
+                        ouf.write('{}={}\n'.format(_tok, tokens[1]))
                         continue
-                
+
                 if tok[0] != '#':
                     print('---- Modifying {} to {}'.format(tok, val))
                     ouf.write('{}={}\n'.format(tok, val))

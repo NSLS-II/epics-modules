@@ -17,6 +17,12 @@ steps:
 - script: |
     make release
   displayName: 'Make Release Files'
+
+- script: |
+    configure/modify_release.py ADSIMDETECTOR SET areaDetector/configure/RELEASE.local
+    configure/modify_release.py ADFASTCCD     SET areaDetector/configure/RELEASE.local
+    configure/modify_release.py ADPROSILICA   SET areaDetector/configure/RELEASE.local
+  displayName: 'Modify AD Release File'
   
 - script: |
     make 
