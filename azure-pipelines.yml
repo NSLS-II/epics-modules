@@ -85,5 +85,7 @@ jobs:
       call ci/setup_epics.bat
       make asyn
     displayName: 'Build asyn'
-  - script: .\asyn\asyn\asynPortDriver\unittest\O.%EPICS_HOST_ARCH%\asynPortDriverTest
-    displayName: 'Run asyn tests'
+  - script: |
+      call ci/setup_epics.bat
+      make areaDetector
+    displayName: 'Build areaDetector and deps'
