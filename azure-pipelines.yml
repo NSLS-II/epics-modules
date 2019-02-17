@@ -81,5 +81,6 @@ jobs:
     displayName: 'Build epics-base'
   - script: |
       call .\ci\setup_epics.bat
+      PATH
       make areaDetector
     displayName: 'Build areaDetector'
