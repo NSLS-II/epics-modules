@@ -78,5 +78,7 @@ jobs:
     displayName: 'Update RELEASE files'
   - script: |
       call ci/setup_epics.bat
-      make -j1 epics-base
+      make epics-base
     displayName: 'Build epics-base'
+  - script: cd epics-base && make tapfiles && make -s test-results
+    displayName: 'Run epics-base tests'
