@@ -25,7 +25,7 @@ define set_release
 endef
 
 MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
-			  ipUnidig ipac modbus motor sscan stream
+			  ipUnidig ipac modbus motor sscan stream quadEM
 
 MODULE_DIRS_CLEAN = $(addsuffix clean,$(MODULE_DIRS))
 
