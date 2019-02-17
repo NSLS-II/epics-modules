@@ -70,11 +70,9 @@ jobs:
   steps:
   - script: |
       git clone https://github.com/microsoft/vcpkg
-      vcpkg/bootstrap-vcpkg.bat
-      vcpkg install strawberryperl
-      perl -v
+      ./vcpkg/bootstrap-vcpkg.bat
     displayName: 'Install deps'
-  - script: cpan ExtUtils::Command
+  - script: ./vcpkg/vcpkg.exe install strawberryperl
   - script: make update
     displayName: 'Update git sources'
   - script: make release
