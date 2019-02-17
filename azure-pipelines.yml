@@ -72,7 +72,7 @@ jobs:
   - script: |
       choco install -y strawberryperl
       dir C:\Strawberry\perl\bin
-      C:\Strawberry\perl\bin\cpan install Test::Harness
+      C:\Strawberry\perl\bin\cpanm install Test::Harness
     displayName: 'Install Packages'
   - script: make update
     displayName: 'Update git repos'
