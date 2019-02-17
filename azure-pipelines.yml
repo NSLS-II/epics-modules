@@ -77,5 +77,5 @@ jobs:
     displayName: 'Update RELEASE files'
   - script: |
       set PATH=C:\Strawberry\perl\bin;%PATH%
-      make areaDetector
+      make -j1 epics-base
     displayName: 'Build areaDetector'
