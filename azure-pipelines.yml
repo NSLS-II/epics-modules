@@ -69,10 +69,10 @@ jobs:
     EPICS_HOST_ARCH: 'windows-x64'
     VC_ARCH: 'amd64'
   steps:
-  - script: |
-      set PATH=C:\Strawberry\perl\bin;%PATH%
-      C:\Strawberry\perl\bin\cpan install Test::Harness
-    displayName: 'Install Packages'
+  #- script: |
+  #    set PATH=C:\Strawberry\perl\bin;%PATH%
+  #    C:\Strawberry\perl\bin\cpan install Test::Harness
+  #  displayName: 'Install Packages'
   - script: make update
     displayName: 'Update git repos'
   - script: make release
@@ -83,6 +83,8 @@ jobs:
     displayName: 'Build epics-base'
   - script: |
       call ci/setup_epics.bat
+      mklink C:\Strawberry\perl\bin\prove.bat C:\Strawberry\perl\bin\prove
+      dir C:\Strawberry\perl\bin\prove.bat
       cd epics-base && make tapfiles && make -s test-results
     displayName: 'Run epics-base tests'
   - script: |
