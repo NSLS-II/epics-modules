@@ -73,8 +73,8 @@ jobs:
       vcpkg/bootstrap-vcpkg.bat
       vcpkg install strawberryperl
       perl -v
-      cpan ExtUtils::Command
     displayName: 'Install deps'
+  - script: cpan ExtUtils::Command
   - script: make update
     displayName: 'Update git sources'
   - script: make release
