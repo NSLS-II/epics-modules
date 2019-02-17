@@ -71,6 +71,7 @@ jobs:
   steps:
   - script: |
       choco install -y strawberryperl
+      dir C:\Strawberry\perl\bin
       C:\Strawberry\perl\bin\cpan install Test::Harness
     displayName: 'Install Packages'
   - script: make update
