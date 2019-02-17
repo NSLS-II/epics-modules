@@ -73,6 +73,7 @@ jobs:
       #      .\vcpkg\bootstrap-vcpkg.bat
       #    displayName: 'Install deps'
   - script: choco install -y strawberryperl
+  - script: where perl
   - script: make update
     displayName: 'Update git sources'
   - script: make release
