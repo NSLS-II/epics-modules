@@ -1,8 +1,11 @@
 # Modular build of EPICS and areaDetector
 
-| Linux Build Status | [![Linux Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master&jobName=Linux)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master) |
+## Status
 
-| Windows Build Status | [![Windows Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master&jobName=Windows)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master) |
+|   | Build & Test |
+|---|:-----:|
+| ![Linux-x64](docs/linux_med.png) **Linux x64**| [![Linux Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master&jobName=Linux)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master) |
+| ![Win-x64](docs/win_med.png) **Windows x64**| [![Windows Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master&jobName=Windows)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master) |
 
 ## Introduction 
 
