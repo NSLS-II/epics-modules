@@ -70,6 +70,8 @@ jobs:
   steps:
   - script: choco install -y strawberryperl
     displayName: 'Update git sources'
+  - script: make update
+    displayName: 'Update git repos'
   - script: make release
     displayName: 'Update RELEASE files'
   - script: |
