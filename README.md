@@ -1,6 +1,6 @@
 # Modular build of EPICS and areaDetector
 
-[![Build Status](https://dev.azure.com/swilkins0971/swilkins/_apis/build/status/NSLS-II.epics-modules?branchName=master)](https://dev.azure.com/swilkins0971/swilkins/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master)
 
 ## Introduction 
 
