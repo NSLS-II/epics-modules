@@ -68,15 +68,11 @@ jobs:
   variables:
     EPICS_HOST_ARCH: 'windows-x64-static'
   steps:
-      #  - script: |
-      #      git clone https://github.com/microsoft/vcpkg
-      #      .\vcpkg\bootstrap-vcpkg.bat
-      #    displayName: 'Install deps'
   - script: choco install -y strawberryperl
-  - script: where perl
-  - script: make update
     displayName: 'Update git sources'
   - script: make release
     displayName: 'Update RELEASE files'
-  - script: make areaDetector
+  - script: |
+      set PATH=C:\Strawberry\perl\bin;%PATH%
+      make areaDetector
     displayName: 'Build areaDetector'
