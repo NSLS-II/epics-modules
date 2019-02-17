@@ -24,6 +24,8 @@ define set_release
   $(wildcard $(1)/configure/RELEASE.$(EPICS_HOST_ARCH)) 
 endef
 
+include configure/VERSIONS
+
 MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
 			  ipUnidig ipac modbus motor sscan stream quadEM
 
@@ -96,21 +98,21 @@ update:
 	# Initialize submodules
 	git submodule foreach --recursive "git stash"
 	git submodule update --init --recursive
-	cd asyn && git fetch --all --tags --prune && git checkout master
-	cd autosave && git fetch --all --tags --prune && git checkout master
-	cd busy && git fetch --all --tags --prune && git checkout master
-	cd calc && git fetch --all --tags --prune && git checkout master
-	cd epics-base && git fetch --all --tags --prune && git checkout 7.0
-	cd iocStats && git fetch --all --tags --prune && git checkout master
-	cd ipac && git fetch --all --tags --prune && git checkout master
-	cd ipUnidig && git fetch --all --tags --prune && git checkout master
-	cd modbus && git fetch --all --tags --prune && git checkout master
-	cd motor && git fetch --all --tags --prune && git checkout master
-	cd quadEM && git fetch --all --tags --prune && git checkout master
-	cd sscan && git fetch --all --tags --prune && git checkout master
-	cd stream && git fetch --all --tags --prune && git checkout master
-	cd stream/StreamDevice && git fetch --all --tags --prune && git checkout master
-	cd areaDetector && git fetch --all --tags --prune && git checkout master
+	cd asyn && git fetch --all --tags --prune && git checkout $(ASYN_VERSION)
+	cd autosave && git fetch --all --tags --prune && git checkout $(AUTOSAVE_VERSION)
+	cd busy && git fetch --all --tags --prune && git checkout $(BUSY_VERSION)
+	cd calc && git fetch --all --tags --prune && git checkout $(CALC_VERSION)
+	cd epics-base && git fetch --all --tags --prune && git checkout $(EPICS_BASE_VERSION)
+	cd iocStats && git fetch --all --tags --prune && git checkout $(DEVIOCSTATS_VERSION)
+	cd ipac && git fetch --all --tags --prune && git checkout $(IPAC_VERSION)
+	cd ipUnidig && git fetch --all --tags --prune && git checkout $(IPUNIDIG_VERSION)
+	cd modbus && git fetch --all --tags --prune && git checkout $(MODBUS_VERSION)
+	cd motor && git fetch --all --tags --prune && git checkout $(MOTOR_VERSION)
+	cd quadEM && git fetch --all --tags --prune && git checkout $(QUADEM_VERSION)
+	cd sscan && git fetch --all --tags --prune && git checkout $(SSCAN_VERSION)
+	cd stream && git fetch --all --tags --prune && git checkout $(STREAM_VERSION)
+	cd stream/StreamDevice && git fetch --all --tags --prune && git checkout $(STREAM_VERSION)
+	cd areaDetector && git fetch --all --tags --prune && git checkout $(AREA_DETECTOR_VERSION)
 	cd areaDetector && git submodule foreach "git fetch --all --tags --prune && git checkout master"
 	git submodule foreach --recursive "git stash pop || true"
 
