@@ -65,18 +65,18 @@ jobs:
 - job: Windows
   pool:
       vmImage: 'vs2017-win2016'
-      #vmImage: 'vs2015-win2012r2'
   variables:
     EPICS_HOST_ARCH: 'windows-x64'
+    VC_ARCH: 'amd64'
   steps:
-  - script: choco install -y strawberryperl
-    displayName: 'Update git sources'
+  - script: |
+      choco install -y strawberryperl
+    displayName: 'Install Packages'
   - script: make update
     displayName: 'Update git repos'
   - script: make release
     displayName: 'Update RELEASE files'
   - script: |
-      set PATH=C:\Strawberry\perl\bin;%PATH%
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+      call ci/setup_epics.bat
       make -j1 epics-base
-    displayName: 'Build areaDetector'
+    displayName: 'Build epics-base'
