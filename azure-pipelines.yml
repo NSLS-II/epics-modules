@@ -69,10 +69,11 @@ jobs:
     EPICS_HOST_ARCH: 'windows-x64'
     VC_ARCH: 'amd64'
   steps:
-  #- script: |
-  #    set PATH=C:\Strawberry\perl\bin;%PATH%
-  #    C:\Strawberry\perl\bin\cpan install Test::Harness
-  #  displayName: 'Install Packages'
+  - script: |
+      set PATH=C:\Strawberry\perl\bin;%PATH%
+      C:\Strawberry\perl\bin\cpan install Test::Harness
+      choco install -y boost-msvc-12
+    displayName: 'Install Packages'
   - script: make update
     displayName: 'Update git repos'
   - script: make release
