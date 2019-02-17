@@ -35,7 +35,7 @@ steps:
   inputs:
     gitHubConnection: NSLS-II
     repositoryName: NSLS-II/epics-modules
-  displayName: ‘Create GitHub Release’
+  displayName: Create GitHub Release
     #action: 'create' # Options: create, edit, delete
     #target: '$(Build.SourceVersion)' # Required when action == Create || Action == Edit
     #tagSource: 'auto' # Required when action == Create# Options: auto, manual
