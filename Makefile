@@ -2,21 +2,6 @@
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 SUPPORT := $(dir $(MKFILE_PATH))
-ASYN=$(SUPPORT)/asyn
-EPICS_BASE=$(SUPPORT)/epics-base
-AUTOSAVE=$(SUPPORT)/autosave
-BUSY=$(SUPPORT)/busy
-CALC=$(SUPPORT)/calc
-SSCAN=$(SUPPORT)/sscan
-DEVIOCSTATS=$(SUPPORT)/iocStats
-SNCSEQ=$(SUPPORT)/seq
-AREA_DETECTOR=$(SUPPORT)/areaDetector
-MOTOR=$(SUPPORT)/motor
-MODBUS=$(SUPPORT)/modbus
-STREAM=$(SUPPORT)/stream
-QUADEM=$(SUPPORT)/quadEM
-IPAC=$(SUPPORT)/ipac
-IPUNIDIG=$(SUPPORT)/ipUnidig
 
 MASTER_FILE=configure/RELEASE
 
@@ -114,23 +99,22 @@ release: .release_areadetector
 update:
 	# Initialize submodules
 	git submodule update --init --recursive
-	cd "$(ASYN)" && git fetch origin master && git checkout master
-	cd "$(AUTOSAVE)" && git fetch origin master && git checkout master
-	cd "$(BUSY)" && git fetch origin master && git checkout master
-	cd "$(CALC)" && git fetch origin master && git checkout master
-	cd "$(EPICS_BASE)" && git fetch origin 7.0 && git checkout 7.0
-	cd "$(DEVIOCSTATS)" && git fetch origin master && git checkout master
-	cd "$(IPUNIDIG)" && git fetch origin master && git checkout master
-	cd "$(IPAC)" && git fetch origin master && git checkout master
-	cd "$(MODBUS)" && git fetch origin master && git checkout master
-	cd "$(MOTOR)" && git fetch origin master && git checkout master
-	cd "$(QUADEM)" && git fetch origin master && git checkout master
-	cd "$(SSCAN)" && git fetch origin master && git checkout master
-	cd "$(SSCAN)" && git fetch origin master && git checkout master
-	cd "$(STREAM)" && git fetch origin master && git checkout master
-	cd "$(STREAM)/StreamDevice" && git fetch origin master && git checkout master
-	cd "$(AREA_DETECTOR)" && git submodule update --init --recursive --remote
-
+	cd asyn && git fetch origin master && git checkout master
+	cd autosave && git fetch origin master && git checkout master
+	cd busy && git fetch origin master && git checkout master
+	cd calc && git fetch origin master && git checkout master
+	cd epics-base && git fetch origin 7.0 && git checkout 7.0
+	cd iocStats && git fetch origin master && git checkout master
+	cd ipac && git fetch origin master && git checkout master
+	cd ipUnidig && git fetch origin master && git checkout master
+	cd modbus && git fetch origin master && git checkout master
+	cd motor && git fetch origin master && git checkout master
+	cd quadEM && git fetch origin master && git checkout master
+	cd sscan && git fetch origin master && git checkout master
+	cd stream && git fetch origin master && git checkout master
+	cd stream/StreamDevice && git fetch origin master && git checkout master
+	cd areaDetector && git fetch origin master && git checkout master
+	cd areaDetector && git submodule foreach "git fetch origin master && git checkout master"
 
 #
 ## Clean up by running "make clean" in all modules and deleting the areadetector
