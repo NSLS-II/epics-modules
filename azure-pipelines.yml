@@ -64,7 +64,8 @@ jobs:
     #  #    #isPreRelease: false # Optional
 - job: Windows
   pool:
-    vmImage: 'vs2017-win2016'
+      #vmImage: 'vs2017-win2016'
+    vmImage: 'vs2015-win2012r2'
   variables:
     EPICS_HOST_ARCH: 'windows-x64-static'
   steps:
