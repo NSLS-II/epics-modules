@@ -1,18 +1,18 @@
 # Modular build of EPICS and areaDetector
 
-## Status
-
-|   | Build & Test |
-|---|:-----:|
-| ![Linux-x64](docs/linux_med.png) **Linux x64**| [![Linux Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master&jobName=Linux)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master) |
-| ![Win-x64](docs/win_med.png) **Windows x64**| [![Windows Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master&jobName=Windows)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master) |
-
 ## Introduction 
 
 This is a repository to build areaDetector and its dependencies out of the relevant 
 git repositories. These are included as submodules (along with areaDetector). 
 
 The top level makefile can be used to build the whole stack. 
+
+## Status
+
+|   | Build & Test |
+|---|:-----:|
+| ![Linux-x64](docs/linux_med.png) **Linux x64**| [![Linux Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master&jobName=Linux)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master) |
+| ![Win-x64](docs/win_med.png) **Windows x64**| [![Windows Build Status](https://dev.azure.com/nsls-ii/epics-modules/_apis/build/status/NSLS-II.epics-modules?branchName=master&jobName=Windows)](https://dev.azure.com/nsls-ii/epics-modules/_build/latest?definitionId=2&branchName=master) |
 
 ## Release Files
 
