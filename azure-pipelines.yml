@@ -47,14 +47,14 @@ steps:
     action: 'create'
     target: '$(Build.SourceVersion)'
     assets: '$(Build.ArtifactStagingDirectory)/*'
-    assetUploadMode: 'delete'
+    assetUploadMode: 'replace'
+    tagSource: 'auto'
+    tag: '$(tagName)'
+    addChangeLog: true
   displayName: 'Create GitHub Release'
-    #tagSource: 'auto' # Required when action == Create# Options: auto, manual
-    #tag: # Required when action == Edit || Action == Delete || TagSource == Manual
     #title: # Optional
     #releaseNotesSource: 'file' # Optional. Options: file, input
     #releaseNotesFile: # Optional
     #releaseNotes: # Optional
     #isDraft: false # Optional
     #isPreRelease: false # Optional
-    #addChangeLog: true # Optional
