@@ -71,6 +71,7 @@ jobs:
   - script: |
       git clone https://github.com/microsoft/vcpkg
       vcpkg/bootstrap-vcpkg.bat
+      vcpkg search
     displayName: 'Install deps'
   - script: make update
     displayName: 'Update git sources'
