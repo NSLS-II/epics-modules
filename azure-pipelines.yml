@@ -22,6 +22,7 @@ steps:
     configure/modify_release.py ADSIMDETECTOR SET areaDetector/configure/RELEASE.local
     configure/modify_release.py ADFASTCCD     SET areaDetector/configure/RELEASE.local
     configure/modify_release.py ADPROSILICA   SET areaDetector/configure/RELEASE.local
+	configure/modify_release.py WITH_BOOST    YES areaDetector/configure/CONFIG_SITE.local
   displayName: 'Modify AD Release File'
   
 - script: |
