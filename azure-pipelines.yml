@@ -68,6 +68,8 @@ jobs:
   variables:
     EPICS_HOST_ARCH: 'windows-x64-static'
   steps:
+  - script: ppm install ExtUtils::Command
+    displayName: 'Install deps'
   - script: make update
     displayName: 'Update git sources'
   - script: make release
