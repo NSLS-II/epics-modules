@@ -65,4 +65,4 @@ jobs:
     vmImage: 'vs2017-win2016'
   steps:
   - script: echo hello from Windows
-  - script: make
+  - script: make update
