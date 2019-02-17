@@ -94,23 +94,25 @@ release: .release_areadetector
 .PHONY: update
 update:
 	# Initialize submodules
+	git submodule foreach --recursive "git stash"
 	git submodule update --init --recursive
-	cd asyn && git fetch origin master && git checkout master
-	cd autosave && git fetch origin master && git checkout master
-	cd busy && git fetch origin master && git checkout master
-	cd calc && git fetch origin master && git checkout master
-	cd epics-base && git fetch origin 7.0 && git checkout 7.0
-	cd iocStats && git fetch origin master && git checkout master
-	cd ipac && git fetch origin master && git checkout master
-	cd ipUnidig && git fetch origin master && git checkout master
-	cd modbus && git fetch origin master && git checkout master
-	cd motor && git fetch origin master && git checkout master
-	cd quadEM && git fetch origin master && git checkout master
-	cd sscan && git fetch origin master && git checkout master
-	cd stream && git fetch origin master && git checkout master
-	cd stream/StreamDevice && git fetch origin master && git checkout master
-	cd areaDetector && git fetch origin master && git checkout master
-	cd areaDetector && git submodule foreach "git fetch origin master && git checkout master"
+	cd asyn && git fetch --all --tags --prune && git checkout master
+	cd autosave && git fetch --all --tags --prune && git checkout master
+	cd busy && git fetch --all --tags --prune && git checkout master
+	cd calc && git fetch --all --tags --prune && git checkout master
+	cd epics-base && git fetch --all --tags --prune && git checkout 7.0
+	cd iocStats && git fetch --all --tags --prune && git checkout master
+	cd ipac && git fetch --all --tags --prune && git checkout master
+	cd ipUnidig && git fetch --all --tags --prune && git checkout master
+	cd modbus && git fetch --all --tags --prune && git checkout master
+	cd motor && git fetch --all --tags --prune && git checkout master
+	cd quadEM && git fetch --all --tags --prune && git checkout master
+	cd sscan && git fetch --all --tags --prune && git checkout master
+	cd stream && git fetch --all --tags --prune && git checkout master
+	cd stream/StreamDevice && git fetch --all --tags --prune && git checkout master
+	cd areaDetector && git fetch --all --tags --prune && git checkout master
+	cd areaDetector && git submodule foreach "git fetch --all --tags --prune && git checkout master"
+	git submodule foreach --recursive "git stash pop || true"
 
 #
 ## Clean up by running "make clean" in all modules and deleting the areadetector
