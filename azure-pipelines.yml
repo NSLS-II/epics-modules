@@ -64,5 +64,9 @@ jobs:
   pool:
     vmImage: 'vs2017-win2016'
   steps:
-  - script: echo hello from Windows
   - script: make update
+    displayName: 'Update git sources'
+  - script: make release
+    displayName: 'Update RELEASE files'
+  - script: make areaDetector
+    displayName: 'Build areaDetector'
