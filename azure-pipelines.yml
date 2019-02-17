@@ -72,7 +72,7 @@ jobs:
       git clone https://github.com/microsoft/vcpkg
       vcpkg/bootstrap-vcpkg.bat
     displayName: 'Install deps'
-  - script: vcpkg/vcpkg.exe install strawberryperl
+  - script: vcpkg install strawberryperl
   - script: make update
     displayName: 'Update git sources'
   - script: make release
