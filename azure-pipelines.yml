@@ -2,66 +2,66 @@ trigger:
 - master
 
 jobs:
-- job: Linux
-  pool:
-    vmImage: 'Ubuntu-16.04'
-  variables:
-    EPICS_HOST_ARCH: 'linux-x86_64'
-  
-  steps:
-  - script: |
-      sudo apt-get -y install libreadline-dev
-      sudo apt-get -y install perl re2c libboost-all-dev
-    displayName: 'Install Packages'
-  
-  - script: |
-      make update
-    displayName: 'Update git repos'
-  
-  - script: |
-      make release
-    displayName: 'Make Release Files'
-  
-  - script: |
-      configure/modify_release.py ADSIMDETECTOR SET areaDetector/configure/RELEASE.local
-      configure/modify_release.py ADFASTCCD     SET areaDetector/configure/RELEASE.local
-      configure/modify_release.py ADPROSILICA   SET areaDetector/configure/RELEASE.local
-      configure/modify_release.py WITH_BOOST    YES areaDetector/configure/CONFIG_SITE.local
-    displayName: 'Modify AD Release File'
-    
-  - script: |
-      make 
-    displayName: 'Build epics-modules'
-   
-  - script: cd epics-base && make tapfiles && make -s test-results
-    displayName: 'Run epics-base tests'
-  
-  - script: asyn/asyn/asynPortDriver/unittest/O.linux-x86_64/asynPortDriverTest
-    displayName: 'Run asyn tests'
-  
-  - script: areaDetector/ADCore/bin/linux-x86_64/plugin-test --log_level=test_suite
-    displayName: 'Run areaDetector tests'
-  
-  # GitHub Release
-  # Create, edit, or delete a GitHub release.
-  #- task: GitHubRelease@0
-  #  inputs:
-  #    gitHubConnection: NSLS-II
-  #    repositoryName: NSLS-II/epics-modules
-  #    action: 'create'
-  #    target: '$(Build.SourceVersion)'
-  #    assets: '$(Build.ArtifactStagingDirectory)/*'
-  #    assetUploadMode: 'replace'
-  #    tagSource: 'auto'
-  #    tag: '$(tagName)'
-  #    addChangeLog: true
-  #  displayName: 'Create GitHub Release'
-  #    #title: # Optional
-  #    #releaseNotesSource: 'file' # Optional. Options: file, input
-  #    #releaseNotesFile: # Optional
-  #    #releaseNotes: # Optional
-  #    #isDraft: false # Optional
-  #    #isPreRelease: false # Optional
+    #- job: Linux
+    #  pool:
+    #    vmImage: 'Ubuntu-16.04'
+    #  variables:
+    #    EPICS_HOST_ARCH: 'linux-x86_64'
+    #  
+    #  steps:
+    #  - script: |
+    #      sudo apt-get -y install libreadline-dev
+    #      sudo apt-get -y install perl re2c libboost-all-dev
+    #    displayName: 'Install Packages'
+    #  
+    #  - script: |
+    #      make update
+    #    displayName: 'Update git repos'
+    #  
+    #  - script: |
+    #      make release
+    #    displayName: 'Make Release Files'
+    #  
+    #  - script: |
+    #      configure/modify_release.py ADSIMDETECTOR SET areaDetector/configure/RELEASE.local
+    #      configure/modify_release.py ADFASTCCD     SET areaDetector/configure/RELEASE.local
+    #      configure/modify_release.py ADPROSILICA   SET areaDetector/configure/RELEASE.local
+    #      configure/modify_release.py WITH_BOOST    YES areaDetector/configure/CONFIG_SITE.local
+    #    displayName: 'Modify AD Release File'
+    #    
+    #  - script: |
+    #      make 
+    #    displayName: 'Build epics-modules'
+    #   
+    #  - script: cd epics-base && make tapfiles && make -s test-results
+    #    displayName: 'Run epics-base tests'
+    #  
+    #  - script: asyn/asyn/asynPortDriver/unittest/O.linux-x86_64/asynPortDriverTest
+    #    displayName: 'Run asyn tests'
+    #  
+    #  - script: areaDetector/ADCore/bin/linux-x86_64/plugin-test --log_level=test_suite
+    #    displayName: 'Run areaDetector tests'
+    #  
+    #  # GitHub Release
+    #  # Create, edit, or delete a GitHub release.
+    #  #- task: GitHubRelease@0
+    #  #  inputs:
+    #  #    gitHubConnection: NSLS-II
+    #  #    repositoryName: NSLS-II/epics-modules
+    #  #    action: 'create'
+    #  #    target: '$(Build.SourceVersion)'
+    #  #    assets: '$(Build.ArtifactStagingDirectory)/*'
+    #  #    assetUploadMode: 'replace'
+    #  #    tagSource: 'auto'
+    #  #    tag: '$(tagName)'
+    #  #    addChangeLog: true
+    #  #  displayName: 'Create GitHub Release'
+    #  #    #title: # Optional
+    #  #    #releaseNotesSource: 'file' # Optional. Options: file, input
+    #  #    #releaseNotesFile: # Optional
+    #  #    #releaseNotes: # Optional
+    #  #    #isDraft: false # Optional
+    #  #    #isPreRelease: false # Optional
 - job: Windows
   pool:
     vmImage: 'vs2017-win2016'
@@ -72,7 +72,7 @@ jobs:
       git clone https://github.com/microsoft/vcpkg
       .\vcpkg\bootstrap-vcpkg.bat
     displayName: 'Install deps'
-  - script: .\vcpkg\vcpkg install strawberryperl
+  - script: .\vcpkg\vcpkg search perl
   - script: make update
     displayName: 'Update git sources'
   - script: make release
