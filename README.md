@@ -14,9 +14,6 @@ The top level makefile can be used to build the whole stack.
 In order to keep the release files consistent between the repositories, the makefile
 target `release` is used to propagate the paths into the relevant repositories. 
 
-__TODO__ : Convert the perl file to a python script to do this more efficiently and 
-not use sed. 
-
 ## Getting started
 
 To update the repository, execute the command:
