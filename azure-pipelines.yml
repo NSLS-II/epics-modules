@@ -33,14 +33,14 @@ jobs:
       make 
     displayName: 'Build epics-modules'
    
-  - script: cd epics-base && make tapfiles && make -s test-results
-    displayName: 'Run epics-base tests'
+    #- script: cd epics-base && make tapfiles && make -s test-results
+    #displayName: 'Run epics-base tests'
   
-  - script: asyn/asyn/asynPortDriver/unittest/O.$EPICS_HOST_ARCH/asynPortDriverTest
-    displayName: 'Run asyn tests'
+    #- script: asyn/asyn/asynPortDriver/unittest/O.$EPICS_HOST_ARCH/asynPortDriverTest
+    #displayName: 'Run asyn tests'
   
-  - script: areaDetector/ADCore/bin/$EPICS_HOST_ARCH/plugin-test --log_level=test_suite
-    displayName: 'Run areaDetector tests'
+    #- script: areaDetector/ADCore/bin/$EPICS_HOST_ARCH/plugin-test --log_level=test_suite
+    #displayName: 'Run areaDetector tests'
   
   # GitHub Release
   # Create, edit, or delete a GitHub release.
@@ -69,8 +69,6 @@ jobs:
     VC_ARCH: 'amd64'
   steps:
   - script: |
-      set PATH=C:\Strawberry\perl\bin;%PATH%
-      C:\Strawberry\perl\bin\cpan install Test::Harness
       choco install -y boost-msvc-12
     displayName: 'Install Packages'
   - script: make update
@@ -78,14 +76,10 @@ jobs:
   - script: make release
     displayName: 'Update RELEASE files'
   - script: |
-      call ci/setup_epics.bat
+      call .\ci\setup_epics.bat
       make epics-base
     displayName: 'Build epics-base'
   - script: |
-      call ci/setup_epics.bat
-      make asyn
-    displayName: 'Build asyn'
-  - script: |
-      call ci/setup_epics.bat
+      call .\ci\setup_epics.bat
       make areaDetector
-    displayName: 'Build areaDetector and deps'
+    displayName: 'Build areaDetector'
