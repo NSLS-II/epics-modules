@@ -29,13 +29,17 @@ steps:
     make 
   displayName: 'Build epics-modules'
 
+- script: |
+    areaDetector/ADCore/bin/linux-x86_64/plugin-test --log_level=test_suite
+  displayName: 'Run ADCore tests'
+
 # GitHub Release
 # Create, edit, or delete a GitHub release.
 - task: GitHubRelease@0
   inputs:
     gitHubConnection: NSLS-II
     repositoryName: NSLS-II/epics-modules
-  displayName: Create GitHub Release
+  displayName: 'Create GitHub Release'
     #action: 'create' # Options: create, edit, delete
     #target: '$(Build.SourceVersion)' # Required when action == Create || Action == Edit
     #tagSource: 'auto' # Required when action == Create# Options: auto, manual
