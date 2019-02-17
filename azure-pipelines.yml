@@ -70,7 +70,6 @@ jobs:
     VC_ARCH: 'amd64'
   steps:
   - script: |
-      dir C:\Strawberry\perl\bin
       set PATH=C:\Strawberry\perl\bin;%PATH%
       C:\Strawberry\perl\bin\cpan install Test::Harness
     displayName: 'Install Packages'
