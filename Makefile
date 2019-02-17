@@ -1,9 +1,6 @@
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-
-SUPPORT := $(dir $(MKFILE_PATH))
-
-MASTER_FILE=configure/RELEASE
+MKFILE_DIR:= $(dir $(MKFILE_PATH))
 
 define set_release
   $(wildcard $(1)/configure/RELEASE) \
@@ -31,7 +28,6 @@ MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
 			  ipUnidig ipac modbus motor sscan stream
 
 MODULE_DIRS_CLEAN = $(addsuffix clean,$(MODULE_DIRS))
-$(info $(MODULE_DIRS_CLEAN))
 
 .PHONY: all
 all: $(MODULE_DIRS)
@@ -68,28 +64,28 @@ $(MODULE_DIRS):
 
 .PHONY: .release_areadetector
 .release_areadetector:
-	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_CONFIG_SITE.local \
-		      $(AREA_DETECTOR)/configure/CONFIG_SITE.local
-	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
-		      $(AREA_DETECTOR)/configure/RELEASE.local
-	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE.local \
-		      $(AREA_DETECTOR)/configure/RELEASE.local
-	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_SUPPORT.local \
-		      $(AREA_DETECTOR)/configure/RELEASE_SUPPORT.local
-	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_LIBS.local \
-		      $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
-	cp -nv $(AREA_DETECTOR)/configure/EXAMPLE_RELEASE_PRODS.local \
-		      $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
+	cp -nv areaDetector/configure/EXAMPLE_CONFIG_SITE.local \
+		      areaDetector/configure/CONFIG_SITE.local
+	cp -nv areaDetector/configure/EXAMPLE_RELEASE.local \
+		      areaDetector/configure/RELEASE.local
+	cp -nv areaDetector/configure/EXAMPLE_RELEASE.local \
+		      areaDetector/configure/RELEASE.local
+	cp -nv areaDetector/configure/EXAMPLE_RELEASE_SUPPORT.local \
+		      areaDetector/configure/RELEASE_SUPPORT.local
+	cp -nv areaDetector/configure/EXAMPLE_RELEASE_LIBS.local \
+		      areaDetector/configure/RELEASE_LIBS.local
+	cp -nv areaDetector/configure/EXAMPLE_RELEASE_PRODS.local \
+		      areaDetector/configure/RELEASE_PRODS.local
 
 .PHONY: release
 release: .release_areadetector
 	$(eval RELEASE_FILES := $(foreach mod, $(MODULE_DIRS), $(call set_release,$(mod)) ))
-	echo "SUPPORT=${SUPPORT}" > "$(SUPPORT)/configure/RELEASE"
-	echo "EPICS_BASE=${SUPPORT}/epics-base" >> "$(SUPPORT)/configure/RELEASE"
-	cat "${SUPPORT}/configure/RELEASE.template" >> "$(SUPPORT)/configure/RELEASE"
+	echo "SUPPORT=${MKFILE_DIR}" > "$(MKFILE_DIR)/configure/RELEASE"
+	echo "EPICS_BASE=${MKFILE_DIR}/epics-base" >> "$(MKFILE_DIR)/configure/RELEASE"
+	cat "${MKFILE_DIR}/configure/RELEASE.template" >> "$(MKFILE_DIR)/configure/RELEASE"
 	configure/modify_release.py SNCSEQ UNSET $(RELEASE_FILES)
-	configure/make_release.py "$(SUPPORT)/configure/RELEASE" $(RELEASE_FILES)
-	configure/modify_release.py MAKE_TEST_IOC_APP UNSET "$(DEVIOCSTATS)/configure/RELEASE"
+	configure/make_release.py "configure/RELEASE" $(RELEASE_FILES)
+	configure/modify_release.py MAKE_TEST_IOC_APP UNSET "iocStats/configure/RELEASE"
 
 #
 ## Update all git repos to their master (or equivalent)
@@ -133,9 +129,9 @@ clean_modules: $(MODULE_DIRS_CLEAN)
 .PHONY: clean_release
 clean_release: clean_modules
 	rm -rf configure/RELEASE
-	rm -rf $(AREA_DETECTOR)/configure/CONFIG_SITE.local
-	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local
-	rm -rf $(AREA_DETECTOR)/configure/RELEASE.local
-	rm -rf $(AREA_DETECTOR)/configure/RELEASE_SUPPORT.local
-	rm -rf $(AREA_DETECTOR)/configure/RELEASE_LIBS.local
-	rm -rf $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
+	rm -rf areaDetector/configure/CONFIG_SITE.local
+	rm -rf areaDetector/configure/RELEASE.local
+	rm -rf areaDetector/configure/RELEASE.local
+	rm -rf areaDetector/configure/RELEASE_SUPPORT.local
+	rm -rf areaDetector/configure/RELEASE_LIBS.local
+	rm -rf areaDetector/configure/RELEASE_PRODS.local
