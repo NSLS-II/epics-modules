@@ -73,13 +73,8 @@ jobs:
   - script: make release
     displayName: 'Update RELEASE files'
   - script: |
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCH%
-      set PATH=C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;%PATH%
-      PATH
-      where perl
-      make epics-base
-    displayName: 'Build epics-base'
-  - script: |
+      where make
+      set PATH=""
       call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCH%
       set PATH=C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;%PATH%
       PATH
