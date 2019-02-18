@@ -1,8 +1,6 @@
 trigger:
 - master
 
-name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
-
 jobs:
 - job: Linux
   pool:
