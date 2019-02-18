@@ -51,6 +51,7 @@ jobs:
       action: 'edit'
       target: '$(Build.SourceVersion)'
       #assets: '$(Build.ArtifactStagingDirectory)/*'
+      assets: '$(Agent.ReleaseDirectory)/*'
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
