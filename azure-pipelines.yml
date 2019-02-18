@@ -44,7 +44,8 @@ jobs:
   - script: |
       mkdir -p release
       tar --exclude-vcs --exclude-backups -cvjf release/areaDetector-$EPICS_HOST_ARCH.tar.gz areaDetector
-    displayName: Make tarballs
+      make show_versions > release/release.txt
+    displayName: Make tarballs and release files
   
   - task: GitHubRelease@0
     inputs:
@@ -56,6 +57,8 @@ jobs:
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
+      releaseNotesSource: 'file'
+      releaseNotesFile: 'release/release.txt'
     displayName: 'Create GitHub Release'
 
 - job: Windows

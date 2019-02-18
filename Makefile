@@ -1,6 +1,36 @@
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
+ifeq ($(OS),Windows NT)
+    Q=
+else
+    Q="
+endif
+
+#
+## Version Definitions
+#
+
+EPICS_BASE_VERSION    := $(or $(EPICS_BASE_VERSION), 7.0)
+ASYN_VERSION          := $(or $(ASYN_VERSION), master)
+AUTOSAVE_VERSION      := $(or $(AUTOSAVE_VERSION), master)
+BUSY_VERSION          := $(or $(BUSY_VERSION), master)
+CALC_VERSION          := $(or $(CALC_VERSION), master)
+SSCAN_VERSION         := $(or $(SSCAN_VERSION), master)
+DEVIOCSTATS_VERSION   := $(or $(DEVIOCSTATS_VERSION), master)
+SNCSEQ_VERSION        := $(or $(SNCSEQ_VERSION), master)
+AREA_DETECTOR_VERSION := $(or $(AREA_DETECTOR_VERSION), master)
+ADCORE_VERSION        := $(or $(ADCORE_VERSION), master)
+MOTOR_VERSION         := $(or $(MOTOR_VERSION), master)
+MODBUS_VERSION        := $(or $(MODBUS_VERSION), master)
+STREAM_VERSION        := $(or $(STREAM_VERSION), master)
+QUADEM_VERSION        := $(or $(QUADEM_VERSION), master)
+IPAC_VERSION          := $(or $(IPAC_VERSION), master)
+IPUNIDIG_VERSION      := $(or $(IPUNIDIG_VERSION), master)
+
+#
+## Function to get all release files
+#
 
 define set_release
   $(wildcard $(1)/configure/RELEASE) \
@@ -24,12 +54,31 @@ define set_release
   $(wildcard $(1)/configure/RELEASE.$(EPICS_HOST_ARCH)) 
 endef
 
-include configure/VERSIONS
-
 MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
 			  ipUnidig ipac modbus motor sscan stream quadEM
 
 MODULE_DIRS_CLEAN = $(addsuffix clean,$(MODULE_DIRS))
+
+.PHONY: show_versions
+show_versions:
+	@echo $(Q)Versions:$(Q)
+	@echo $(Q)$(Q)
+	@echo $(Q)EPICS_BASE Version           = $(EPICS_BASE_VERSION)$(Q)
+	@echo $(Q)ASYN Version                 = $(ASYN_VERSION)$(Q)
+	@echo $(Q)AUTOSAVE Version             = $(AUTOSAVE_VERSION)$(Q)
+	@echo $(Q)BUSY Version                 = $(BUSY_VERSION)$(Q)
+	@echo $(Q)CALC Version                 = $(CALC_VERSION)$(Q)
+	@echo $(Q)SSCAN Version                = $(SSCAN_VERSION)$(Q)
+	@echo $(Q)DEVIOCSTATS Version          = $(DEVIOCSTATS_VERSION)$(Q)
+	@echo $(Q)SNCSEQ Version               = $(SNCSEQ_VERSION)$(Q)
+	@echo $(Q)AREA_DETECTOR Version        = $(AREA_DETECTOR_VERSION)$(Q)
+	@echo $(Q)ADCORE Version               = $(ADCORE_VERSION)$(Q)
+	@echo $(Q)MOTOR Version                = $(MOTOR_VERSION)$(Q)
+	@echo $(Q)MODBUS Version               = $(MODBUS_VERSION)$(Q)
+	@echo $(Q)STREAM Version               = $(STREAM_VERSION)$(Q)
+	@echo $(Q)QUADEM Version               = $(QUADEM_VERSION)$(Q)
+	@echo $(Q)IPAC Version                 = $(IPAC_VERSION)$(Q)
+	@echo $(Q)IPUNIDIG Version             = $(IPUNIDIG_VERSION)$(Q)
 
 .PHONY: all
 all: $(MODULE_DIRS)
