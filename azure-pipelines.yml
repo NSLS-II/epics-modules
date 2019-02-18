@@ -67,6 +67,7 @@ jobs:
   variables:
     EPICS_HOST_ARCH: 'windows-x64'
     VC_ARCH: 'amd64'
+  steps:
   - script: make update
     displayName: 'Update git repos'
   - script: make release
