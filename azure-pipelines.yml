@@ -1,6 +1,8 @@
 trigger:
 - master
 
+name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
 jobs:
 - job: Linux
   pool:
@@ -41,7 +43,7 @@ jobs:
 
   - script: |
       mkdir -p release
-      tar cvzf release/areaDetector.tar.gz areaDetector
+      tar --exclude-vcs --exclude-backups -cvjf release/areaDetector-$EPICS_HOST_ARCH.tar.gz areaDetector
     displayName: Make tarballs
   
   - task: GitHubRelease@0
@@ -50,36 +52,51 @@ jobs:
       repositoryName: NSLS-II/epics-modules
       action: 'edit'
       target: '$(Build.SourceVersion)'
-      assets: 'release/*'
-      assetUploadMode: 'delete'
+      assets: 'release/*.tar.gz'
+      assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
     displayName: 'Create GitHub Release'
-  #    #title: # Optional
-  #    #releaseNotesSource: 'file' # Optional. Options: file, input
-  #    #releaseNotesFile: # Optional
-  #    #releaseNotes: # Optional
-  #    #isDraft: false # Optional
-  #    #isPreRelease: false # Optional
+
 - job: Windows
   pool:
       vmImage: 'vs2017-win2016'
   variables:
     EPICS_HOST_ARCH: 'windows-x64-static'
     VC_ARCH: 'amd64'
+
   steps:
   - script: make update
     displayName: 'Update git repos'
+
   - script: make release
     displayName: 'Update RELEASE files'
+
   - script: | 
-      PATH
-      where make
-      where where
       set PATH=C:\ProgramData\Chocolatey\bin;C:\Windows\System32
       call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCH%
       set PATH=C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;%PATH%
       PATH
-      where perl
       make areaDetector
     displayName: 'Build areaDetector'
+
+  - powershell: |
+      $path = "areaDetector"
+      New-Item -Path "." -Force -Name $path -ItemType "directory"
+      $destination = "release/areaDetector-$env:EPICS_HOST_ARCH.zip"
+      $exclude = @("*.git*")
+      $files = Get-ChildItem -Path $path -Exclude $exclude
+      Compress-Archive -Path $files $destination -CompressionLevel Fastest
+    displayName: Create archive
+
+  - task: GitHubRelease@0
+    inputs:
+      gitHubConnection: NSLS-II
+      repositoryName: NSLS-II/epics-modules
+      action: 'edit'
+      target: '$(Build.SourceVersion)'
+      assets: 'release/*.zip'
+      assetUploadMode: 'replace'
+      tagSource: 'Git tag'
+      tag: 'v0.1'
+    displayName: 'Create GitHub Release'
