@@ -33,26 +33,25 @@ jobs:
       make 
     displayName: 'Build epics-modules'
    
-    #- script: cd epics-base && make tapfiles && make -s test-results
-    #displayName: 'Run epics-base tests'
+  - script: asyn/asyn/asynPortDriver/unittest/O.$EPICS_HOST_ARCH/asynPortDriverTest
+    displayName: 'Run asyn tests'
   
-    #- script: asyn/asyn/asynPortDriver/unittest/O.$EPICS_HOST_ARCH/asynPortDriverTest
-    #displayName: 'Run asyn tests'
+  - script: areaDetector/ADCore/bin/$EPICS_HOST_ARCH/plugin-test --log_level=test_suite
+    displayName: 'Run areaDetector tests'
+
+  - script: |
+      mkdir -p release
+      tar cvzf release/areaDetector.tar.gz areaDetector
+    displayName: Make tarballs
   
-    #- script: areaDetector/ADCore/bin/$EPICS_HOST_ARCH/plugin-test --log_level=test_suite
-    #displayName: 'Run areaDetector tests'
-  
-  # GitHub Release
-  # Create, edit, or delete a GitHub release.
   - task: GitHubRelease@0
     inputs:
       gitHubConnection: NSLS-II
       repositoryName: NSLS-II/epics-modules
       action: 'edit'
       target: '$(Build.SourceVersion)'
-      #assets: '$(Build.ArtifactStagingDirectory)/*'
-      assets: '$(Agent.ReleaseDirectory)/*'
-      assetUploadMode: 'replace'
+      assets: 'release/*'
+      assetUploadMode: 'delete'
       tagSource: 'Git tag'
       tag: 'v0.1'
     displayName: 'Create GitHub Release'
