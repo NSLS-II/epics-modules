@@ -48,7 +48,7 @@ jobs:
     inputs:
       gitHubConnection: NSLS-II
       repositoryName: NSLS-II/epics-modules
-      action: 'update'
+      action: 'edit'
       target: '$(Build.SourceVersion)'
       #assets: '$(Build.ArtifactStagingDirectory)/*'
       assetUploadMode: 'replace'
