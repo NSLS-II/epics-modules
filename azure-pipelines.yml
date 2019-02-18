@@ -82,10 +82,10 @@ jobs:
 
   - powershell: |
       $path = "areaDetector"
-      New-Item -Path "." -Force -Name $path -ItemType "directory"
       $destination = "release/areaDetector-$env:EPICS_HOST_ARCH.zip"
       $exclude = @("*.git*")
       $files = Get-ChildItem -Path $path -Exclude $exclude
+      New-Item -Path "." -Force -Name "release" -ItemType "directory"
       Compress-Archive -Path $files $destination -CompressionLevel Fastest
     displayName: Create archive
 
