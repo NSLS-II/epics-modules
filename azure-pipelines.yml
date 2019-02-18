@@ -74,7 +74,8 @@ jobs:
     displayName: 'Update RELEASE files'
   - script: |
       where make
-      set PATH=""
+      where where
+      set PATH=C:\ProgramData\Chocolatey\bin
       call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCH%
       set PATH=C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;%PATH%
       PATH
