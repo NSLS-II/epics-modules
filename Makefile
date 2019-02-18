@@ -1,11 +1,6 @@
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
-ifeq ($(OS),Windows NT)
-    Q=
-else
-    Q="
-endif
 
 #
 ## Version Definitions
@@ -58,27 +53,6 @@ MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
 			  ipUnidig ipac modbus motor sscan stream quadEM
 
 MODULE_DIRS_CLEAN = $(addsuffix clean,$(MODULE_DIRS))
-
-.PHONY: show_versions
-show_versions:
-	@echo $(Q)Versions:$(Q)
-	@echo $(Q)$(Q)
-	@echo $(Q)EPICS_BASE Version           = $(EPICS_BASE_VERSION)$(Q)
-	@echo $(Q)ASYN Version                 = $(ASYN_VERSION)$(Q)
-	@echo $(Q)AUTOSAVE Version             = $(AUTOSAVE_VERSION)$(Q)
-	@echo $(Q)BUSY Version                 = $(BUSY_VERSION)$(Q)
-	@echo $(Q)CALC Version                 = $(CALC_VERSION)$(Q)
-	@echo $(Q)SSCAN Version                = $(SSCAN_VERSION)$(Q)
-	@echo $(Q)DEVIOCSTATS Version          = $(DEVIOCSTATS_VERSION)$(Q)
-	@echo $(Q)SNCSEQ Version               = $(SNCSEQ_VERSION)$(Q)
-	@echo $(Q)AREA_DETECTOR Version        = $(AREA_DETECTOR_VERSION)$(Q)
-	@echo $(Q)ADCORE Version               = $(ADCORE_VERSION)$(Q)
-	@echo $(Q)MOTOR Version                = $(MOTOR_VERSION)$(Q)
-	@echo $(Q)MODBUS Version               = $(MODBUS_VERSION)$(Q)
-	@echo $(Q)STREAM Version               = $(STREAM_VERSION)$(Q)
-	@echo $(Q)QUADEM Version               = $(QUADEM_VERSION)$(Q)
-	@echo $(Q)IPAC Version                 = $(IPAC_VERSION)$(Q)
-	@echo $(Q)IPUNIDIG Version             = $(IPUNIDIG_VERSION)$(Q)
 
 .PHONY: all
 all: $(MODULE_DIRS)
@@ -188,3 +162,25 @@ clean_release: clean_modules
 	rm -rf areaDetector/configure/RELEASE_SUPPORT.local
 	rm -rf areaDetector/configure/RELEASE_LIBS.local
 	rm -rf areaDetector/configure/RELEASE_PRODS.local
+
+.PHONY: show_versions
+show_versions:
+	@echo "Versions:"
+	@echo ""
+	@echo "EPICS_BASE Version           = $(EPICS_BASE_VERSION)"
+	@echo "ASYN Version                 = $(ASYN_VERSION)"
+	@echo "AUTOSAVE Version             = $(AUTOSAVE_VERSION)"
+	@echo "BUSY Version                 = $(BUSY_VERSION)"
+	@echo "CALC Version                 = $(CALC_VERSION)"
+	@echo "SSCAN Version                = $(SSCAN_VERSION)"
+	@echo "DEVIOCSTATS Version          = $(DEVIOCSTATS_VERSION)"
+	@echo "SNCSEQ Version               = $(SNCSEQ_VERSION)"
+	@echo "AREA_DETECTOR Version        = $(AREA_DETECTOR_VERSION)"
+	@echo "ADCORE Version               = $(ADCORE_VERSION)"
+	@echo "MOTOR Version                = $(MOTOR_VERSION)"
+	@echo "MODBUS Version               = $(MODBUS_VERSION)"
+	@echo "STREAM Version               = $(STREAM_VERSION)"
+	@echo "QUADEM Version               = $(QUADEM_VERSION)"
+	@echo "IPAC Version                 = $(IPAC_VERSION)"
+	@echo "IPUNIDIG Version             = $(IPUNIDIG_VERSION)"
+
