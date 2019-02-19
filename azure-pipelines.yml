@@ -89,6 +89,9 @@ jobs:
       New-Item -Path "." -Force -Name "release" -ItemType "directory"
       Compress-Archive -Path $files $destination -CompressionLevel Fastest
     displayName: Create archive
+    
+  - script: make versions > release\release.txt
+    displayName: 'Set release text'
 
   - task: GitHubRelease@0
     inputs:
@@ -100,4 +103,6 @@ jobs:
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
+      releaseNotesSource: 'file'
+      releaseNotesFile: 'release/release.txt'
     displayName: 'Create GitHub Release'
