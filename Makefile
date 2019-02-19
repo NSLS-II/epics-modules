@@ -24,6 +24,13 @@ IPAC_VERSION          := $(or $(IPAC_VERSION), master)
 IPUNIDIG_VERSION      := $(or $(IPUNIDIG_VERSION), master)
 
 #
+## If files exist in the configure dir, include them If files exist in the configure dir, include them  
+#
+
+-include configure/VERSIONS
+-include configure/VERSIONS.$(EPICS_HOST_ARCH)
+
+#
 ## Function to get all release files
 #
 
@@ -52,7 +59,8 @@ endef
 MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
 			  ipUnidig ipac modbus motor sscan stream quadEM
 
-MODULE_DIRS_CLEAN = $(addsuffix clean,$(MODULE_DIRS))
+MODULE_DIRS_CLEAN = $(addsuffix _clean,$(MODULE_DIRS))
+MODULE_DIRS_VERSION = $(addsuffix _version,$(MODULE_DIRS))
 
 .PHONY: all
 all: $(MODULE_DIRS)
@@ -150,8 +158,8 @@ clean: clean_release
 .PHONY: clean_modules
 clean_modules: $(MODULE_DIRS_CLEAN)
 
-%clean: 
-	$(MAKE) -C $(patsubst %clean,%,$@) clean
+%_clean: 
+	$(MAKE) -C $(patsubst %_clean,%,$@) clean
 
 .PHONY: clean_release
 clean_release: clean_modules
@@ -163,24 +171,11 @@ clean_release: clean_modules
 	rm -rf areaDetector/configure/RELEASE_LIBS.local
 	rm -rf areaDetector/configure/RELEASE_PRODS.local
 
-.PHONY: show_versions
-show_versions:
-	@echo "Versions:"
-	@echo ""
-	@echo "EPICS_BASE Version           = $(EPICS_BASE_VERSION)"
-	@echo "ASYN Version                 = $(ASYN_VERSION)"
-	@echo "AUTOSAVE Version             = $(AUTOSAVE_VERSION)"
-	@echo "BUSY Version                 = $(BUSY_VERSION)"
-	@echo "CALC Version                 = $(CALC_VERSION)"
-	@echo "SSCAN Version                = $(SSCAN_VERSION)"
-	@echo "DEVIOCSTATS Version          = $(DEVIOCSTATS_VERSION)"
-	@echo "SNCSEQ Version               = $(SNCSEQ_VERSION)"
-	@echo "AREA_DETECTOR Version        = $(AREA_DETECTOR_VERSION)"
-	@echo "ADCORE Version               = $(ADCORE_VERSION)"
-	@echo "MOTOR Version                = $(MOTOR_VERSION)"
-	@echo "MODBUS Version               = $(MODBUS_VERSION)"
-	@echo "STREAM Version               = $(STREAM_VERSION)"
-	@echo "QUADEM Version               = $(QUADEM_VERSION)"
-	@echo "IPAC Version                 = $(IPAC_VERSION)"
-	@echo "IPUNIDIG Version             = $(IPUNIDIG_VERSION)"
+.PHONY: versions
+versions: $(MODULE_DIRS_VERSION)
+
+%_version: 
+	@printf "%20s = %s\n" \
+		"$(patsubst %_version,%,$@)" \
+		"$(shell cd $(patsubst %_version,%,$@) && git describe --tags)"
 

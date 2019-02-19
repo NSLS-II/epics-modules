@@ -42,7 +42,7 @@ jobs:
   - script: |
       mkdir -p release
       tar --exclude-vcs --exclude-backups -cvjf release/areaDetector-$EPICS_HOST_ARCH.tar.gz areaDetector
-      make show_versions > release/release.txt
+      make versions > release/release.txt
     displayName: Make tarballs and release files
   
   - task: GitHubRelease@0
