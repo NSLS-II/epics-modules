@@ -2,6 +2,8 @@
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
 
+$(info $(PATH))
+
 #
 ## Version Definitions
 #
@@ -172,7 +174,12 @@ clean_release: clean_modules
 	rm -rf areaDetector/configure/RELEASE_PRODS.local
 
 .PHONY: versions
-versions: $(MODULE_DIRS_VERSION)
+versions: .version_header $(MODULE_DIRS_VERSION)
+
+PHONY: .version_header
+.version_header:
+	@printf "Versions:\n"
+	@printf "Created with %s\n\n" "$(shell git describe --tags)"
 
 %_version: 
 	@printf "%20s = %s\n" \
