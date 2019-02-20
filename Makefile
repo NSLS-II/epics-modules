@@ -144,7 +144,7 @@ update:
 	cd quadEM && git fetch --all --tags --prune && git checkout $(QUADEM_VERSION)
 	cd sscan && git fetch --all --tags --prune && git checkout $(SSCAN_VERSION)
 	cd stream && git fetch --all --tags --prune && git checkout $(STREAM_VERSION)
-	cd stream/StreamDevice && git fetch --all --tags --prune && git checkout $(STREAM_VERSION)
+	#cd stream/StreamDevice && git fetch --all --tags --prune && git checkout $(STREAM_VERSION)
 	cd areaDetector && git fetch --all --tags --prune && git checkout $(AREA_DETECTOR_VERSION)
 	cd areaDetector && git submodule foreach "git fetch --all --tags --prune && git checkout master"
 	git submodule foreach --recursive "git stash pop || true"
