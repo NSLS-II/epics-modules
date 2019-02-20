@@ -2,8 +2,6 @@
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
 
-$(info $(PATH))
-
 #
 ## Version Definitions
 #
@@ -181,7 +179,7 @@ PHONY: .version_header
 	@printf "Versions:\n"
 	@printf "Created with %s\n\n" "$(shell git describe --tags)"
 
-%_version: 
+%_version: .version_header
 	@printf "%20s = %s\n" \
 		"$(patsubst %_version,%,$@)" \
 		"$(shell cd $(patsubst %_version,%,$@) && git describe --tags)"
