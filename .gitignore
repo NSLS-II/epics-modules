@@ -1,3 +1,5 @@
 configure/RELEASE
+configure/VERSIONS
+configure/VERSIONS.*
 release
 *.swp
