@@ -25,7 +25,6 @@ Clone the repository:
 ```
 git clone https://github.com/NSLS-II/epics-modules
 cd epics-modules/
-git submodule init && git submodule update
 ```
 
 To update the repository, execute the command:
@@ -39,13 +38,13 @@ make release
 to make the releases consistent. For areaDetector, the file `areaDetector/configure/CONFIG_SITE`
 should be edited to make changes for local libraries. To specify which detectors are built, the 
 file `areaDetector/configure/RELEASE.local` should be modified, uncommenting any lines for
-detectors to be build.
+detectors to be built.
 
 Finally, engage the build with
 ```
 make -j XX
 ```
-where `XX` is the number of cores on the system. Note: this can also be accomplished by setting the
+where `XX` is the number of cores on the system. **Note**: this can also be accomplished by setting the
 environmental variable `MAKEFLAGS`:
 ```
 export MAKEFLAGS="--jobs `nproc`"
