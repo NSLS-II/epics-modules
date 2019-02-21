@@ -5,7 +5,7 @@
 This is a repository to build areaDetector and its dependencies out of the relevant 
 git repositories. These are included as submodules (along with areaDetector). 
 
-The top level makefile can be used to build the whole stack. 
+The top level `Makefile` can be used to build the whole stack.
 
 ## Status
 
@@ -16,10 +16,18 @@ The top level makefile can be used to build the whole stack.
 
 ## Release Files
 
-In order to keep the release files consistent between the repositories, the makefile
+In order to keep the release files consistent between the repositories, the `Makefile`
 target `release` is used to propagate the paths into the relevant repositories. 
 
 ## Getting started
+
+Clone the repository:
+```
+git clone https://github.com/NSLS-II/epics-modules
+cd epics-modules/
+git submodule init
+git submodule update
+```
 
 To update the repository, execute the command:
 ```
@@ -38,7 +46,7 @@ Finally, engage the build with
 ```
 make -j XX
 ```
-where `XX` is the number of cores on the system. Note: this can also be acomplished by setting the 
+where `XX` is the number of cores on the system. Note: this can also be accomplished by setting the
 environmental variable `MAKEFLAGS`:
 ```
 export MAKEFLAGS="--jobs `nproc`"
