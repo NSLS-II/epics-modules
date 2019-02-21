@@ -80,6 +80,8 @@ jobs:
       PATH
       make areaDetector
     displayName: 'Build areaDetector'
+  - script: .\asyn\asyn\asynPortDriver\unittest\O.%EPICS_HOST_ARCH%\asynPortDriverTest
+    displayName: Run Asyn Tests
 
   - powershell: |
       $path = "areaDetector"
