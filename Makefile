@@ -170,6 +170,10 @@ clean_release: clean_modules
 	rm -rf areaDetector/configure/RELEASE_SUPPORT.local
 	rm -rf areaDetector/configure/RELEASE_LIBS.local
 	rm -rf areaDetector/configure/RELEASE_PRODS.local
+	
+#
+## Make version info from git
+#
 
 .PHONY: versions
 versions: .version_header $(MODULE_DIRS_VERSION)
