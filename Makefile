@@ -101,8 +101,6 @@ $(MODULE_DIRS):
 		      areaDetector/configure/CONFIG_SITE.local
 	cp -nv areaDetector/configure/EXAMPLE_RELEASE.local \
 		      areaDetector/configure/RELEASE.local
-	cp -nv areaDetector/configure/EXAMPLE_RELEASE.local \
-		      areaDetector/configure/RELEASE.local
 	cp -nv areaDetector/configure/EXAMPLE_RELEASE_SUPPORT.local \
 		      areaDetector/configure/RELEASE_SUPPORT.local
 	cp -nv areaDetector/configure/EXAMPLE_RELEASE_LIBS.local \
