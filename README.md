@@ -25,8 +25,7 @@ Clone the repository:
 ```
 git clone https://github.com/NSLS-II/epics-modules
 cd epics-modules/
-git submodule init
-git submodule update
+git submodule init && git submodule update
 ```
 
 To update the repository, execute the command:
