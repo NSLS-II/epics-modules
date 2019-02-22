@@ -101,8 +101,6 @@ $(MODULE_DIRS):
 		      areaDetector/configure/CONFIG_SITE.local
 	cp -nv areaDetector/configure/EXAMPLE_RELEASE.local \
 		      areaDetector/configure/RELEASE.local
-	cp -nv areaDetector/configure/EXAMPLE_RELEASE.local \
-		      areaDetector/configure/RELEASE.local
 	cp -nv areaDetector/configure/EXAMPLE_RELEASE_SUPPORT.local \
 		      areaDetector/configure/RELEASE_SUPPORT.local
 	cp -nv areaDetector/configure/EXAMPLE_RELEASE_LIBS.local \
@@ -163,13 +161,13 @@ clean_modules: $(MODULE_DIRS_CLEAN)
 
 .PHONY: clean_release
 clean_release: clean_modules
-	rm -rf configure/RELEASE
-	rm -rf areaDetector/configure/CONFIG_SITE.local
-	rm -rf areaDetector/configure/RELEASE.local
-	rm -rf areaDetector/configure/RELEASE.local
-	rm -rf areaDetector/configure/RELEASE_SUPPORT.local
-	rm -rf areaDetector/configure/RELEASE_LIBS.local
-	rm -rf areaDetector/configure/RELEASE_PRODS.local
+	rm -r configure/RELEASE
+	rm -r areaDetector/configure/CONFIG_SITE.local
+	rm -r areaDetector/configure/RELEASE.local
+	rm -r areaDetector/configure/RELEASE.local
+	rm -r areaDetector/configure/RELEASE_SUPPORT.local
+	rm -r areaDetector/configure/RELEASE_LIBS.local
+	rm -r areaDetector/configure/RELEASE_PRODS.local
 	
 #
 ## Make version info from git
