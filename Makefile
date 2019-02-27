@@ -77,17 +77,17 @@ autosave: epics-base
 
 iocStats: epics-base
 
-motor: epics-base asyn ipac
+motor: epics-base asyn busy ipac
 
 modbus: epics-base asyn
 
-stream: epics-base asyn ipac
+stream: epics-base asyn calc sscan
 
-quadEM: epics-base ipac areaDetector 
+ipUnidig: epics-base asyn ipac
+
+quadEM: epics-base ipac busy ipUnidig autosave sscan calc iocStats areaDetector 
 
 ipac: epics-base 
-
-ipUnidig: epics-base ipac
 
 areaDetector: epics-base asyn calc sscan busy autosave iocStats
 
@@ -161,13 +161,12 @@ clean_modules: $(MODULE_DIRS_CLEAN)
 
 .PHONY: clean_release
 clean_release: clean_modules
-	rm -r configure/RELEASE
-	rm -r areaDetector/configure/CONFIG_SITE.local
-	rm -r areaDetector/configure/RELEASE.local
-	rm -r areaDetector/configure/RELEASE.local
-	rm -r areaDetector/configure/RELEASE_SUPPORT.local
-	rm -r areaDetector/configure/RELEASE_LIBS.local
-	rm -r areaDetector/configure/RELEASE_PRODS.local
+	rm -f configure/RELEASE
+	rm -f areaDetector/configure/CONFIG_SITE.local
+	rm -f areaDetector/configure/RELEASE.local
+	rm -f areaDetector/configure/RELEASE_SUPPORT.local
+	rm -f areaDetector/configure/RELEASE_LIBS.local
+	rm -f areaDetector/configure/RELEASE_PRODS.local
 	
 #
 ## Make version info from git
