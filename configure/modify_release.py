@@ -56,15 +56,15 @@ def modify_release(filename, token, unset=True, val=None):
                         print('---- Setting {}'.format(_tok))
                         ouf.write('{}={}\n'.format(_tok, tokens[1]))
                         continue
-
-                if tok[0] != '#':
-                    print('---- Modifying {} to {}'.format(tok, val))
-                    ouf.write('{}={}\n'.format(_tok, val))
                 else:
-                    #Token was commented, but we set anyway
-                    print('---- Modifying unset variable {} to {}'
-                          .format(_tok, val))
-                    ouf.write('{}={}\n'.format(_tok, val))
+                    if tok[0] != '#':
+                        print('---- Modifying {} to {}'.format(tok, val))
+                        ouf.write('{}={}\n'.format(_tok, val))
+                    else:
+                        #Token was commented, but we set anyway
+                        print('---- Modifying unset variable {} to {}'
+                            .format(_tok, val))
+                        ouf.write('{}={}\n'.format(_tok, val))
             else:
                 ouf.write(line)
 
