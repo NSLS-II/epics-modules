@@ -65,6 +65,15 @@ jobs:
   variables:
     EPICS_HOST_ARCH: 'windows-x64-static'
     VC_ARCH: 'amd64'
+    BOOST_VERSION: '1_69_0'
+
+  - script: |
+      curl -Lo boost.zip  https://dl.bintray.com/boostorg/release/1.69.0/source/boost_%BOOST_VERSION%.zip
+      unzip -q boost.zip
+      cd boost_%BOOST_VERSION%
+      call bootstrap.bat
+      .\b2 address-model=64 architecture=x86 --with-test link=static --prefix=%BUILD_STAGINGDIRECTORY%/deps install
+    displayName: Build Boost
 
   steps:
   - script: make update
@@ -72,6 +81,22 @@ jobs:
 
   - script: make release
     displayName: 'Update RELEASE files'
+
+  - script: |
+      python configure/modify_release.py ADSIMDETECTOR SET areaDetector/configure/RELEASE.local
+      python configure/modify_release.py WITH_BOOST    YES areaDetector/configure/CONFIG_SITE.local
+      python configure/modify_release.py BOOST_USE_STATIC_LINK YES areaDetector/configure/CONFIG_SITE.local
+      python configure/modify_release.py BOOST_LIB "%BUILD_STAGINGDIRECTORY%/boost_%BOOST_VERSION%" areaDetector/configure/CONFIG_SITE.local
+      python configure/modify_release.py BOOST_INCLUDE "%BUILD_STAGINGDIRECTORY%/boost_%BOOST_VERSION%" areaDetector/configure/CONFIG_SITE.local
+    displayName: 'Modify AD Release File'
+
+  - script: |
+      curl -Lo boost.zip  https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.zip
+      unzip -q boost.zip
+      cd boost_1_69_0
+      call bootstrap.bat
+      .\b2 toolset=msvc link=static threading=multi runtime-link=static
+    displayName: Build Boost
 
   - script: | 
       set PATH=C:\ProgramData\Chocolatey\bin;C:\Windows\System32
