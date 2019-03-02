@@ -60,6 +60,7 @@ MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
 			  ipUnidig ipac modbus motor sscan stream quadEM
 
 MODULE_DIRS_CLEAN = $(addsuffix _clean,$(MODULE_DIRS))
+MODULE_DIRS_INSTALL = $(addsuffix _install,$(MODULE_DIRS))
 MODULE_DIRS_VERSION = $(addsuffix _version,$(MODULE_DIRS))
 
 .PHONY: all
@@ -145,6 +146,19 @@ update:
 	cd areaDetector && git submodule foreach "git fetch --all --tags --prune && git checkout master"
 	git submodule foreach --recursive "git stash pop || true"
 
+#
+## Install into directory
+#
+
+.PHONY: .install
+.install: 
+	install -Dd $(DESTDIR)$(prefix)/epics
+
+.PHONY: install
+install: .install $(MODULE_DIRS_INSTALL)
+
+%_install: 
+	tar --exclude-vcs -cf - $(patsubst %_install,%,$@) | (cd $(DESTDIR)$(prefix)/epics && tar xvf - )
 #
 ## Clean up by running "make clean" in all modules and deleting the areadetector
 ## local files
