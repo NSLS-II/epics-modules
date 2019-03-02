@@ -1,3 +1,7 @@
+# Some defaults
+prefix = /opt
+EPICS_DIR = /epics
+
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
@@ -152,13 +156,14 @@ update:
 
 .PHONY: .install
 .install: 
-	install -Dd $(DESTDIR)$(prefix)/epics
+	install -Dd $(DESTDIR)$(prefix)/$(EPICS_DIR)
 
 .PHONY: install
 install: .install $(MODULE_DIRS_INSTALL)
 
 %_install: 
-	tar --exclude-vcs -cf - $(patsubst %_install,%,$@) | (cd $(DESTDIR)$(prefix)/epics && tar xvf - )
+	tar --exclude-vcs -cf - $(patsubst %_install,%,$@) | \
+		(cd $(DESTDIR)$(prefix)/$(EPICS_DIR) && tar xvf - )
 #
 ## Clean up by running "make clean" in all modules and deleting the areadetector
 ## local files
