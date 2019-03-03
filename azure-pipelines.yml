@@ -47,7 +47,7 @@ jobs:
     displayName: Make tarballs and release files
 
   - script: |
-      debuild --no-tgz-check
+      debuild -i -us -uc -b
     displayName: Make Debian package
   
   - task: GitHubRelease@0
