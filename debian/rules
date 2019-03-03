@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+%:
+	dh $@ 
+
+override_dh_auto_configure:
+
+override_dh_auto_test:
+
+override_dh_auto_build:
+	make release
+	make 
+
+override_dh_auto_install:
+	dh_auto_install -- prefix=/opt
+
+override_dh_shlibdeps:
+	dh_shlibdeps -X areaDetector -X pcre
