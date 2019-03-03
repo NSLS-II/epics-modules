@@ -12,6 +12,7 @@ jobs:
   - script: |
       sudo apt-get -y install libreadline-dev
       sudo apt-get -y install perl re2c libboost-all-dev
+      sudo apt-get -y install build-essential 
     displayName: 'Install Packages'
   
   - script: |
@@ -44,6 +45,10 @@ jobs:
       tar --exclude-vcs --exclude-backups -cvjf release/areaDetector-$EPICS_HOST_ARCH.tar.gz areaDetector
       make versions > release/release.txt
     displayName: Make tarballs and release files
+
+  - script: |
+      debuild --no-tgz-check
+    displayName: Make Debian package
   
   - task: GitHubRelease@0
     inputs:
