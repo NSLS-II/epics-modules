@@ -10,9 +10,10 @@ jobs:
   
   steps:
   - script: |
-      sudo apt-get -y install libreadline-dev
-      sudo apt-get -y install perl re2c libboost-all-dev
-      sudo apt-get -y install build-essential devscripts
+      sudo apt-get -y install \
+        libreadline-dev libraw1394-11 \
+        perl re2c libboost-all-dev \
+        build-essential devscripts debhelper \
     displayName: 'Install Packages'
   
   - script: |
