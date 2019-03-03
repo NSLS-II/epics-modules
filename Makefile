@@ -5,6 +5,9 @@ EPICS_DIR = /epics
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
+SUPPORT := $(or $(SUPPORT), $(MKFILE_DIR))
+
+$(info $(SUPPORT))
 
 #
 ## Version Definitions
@@ -118,8 +121,8 @@ $(MODULE_DIRS):
 .PHONY: release
 release: .release_areadetector
 	$(eval RELEASE_FILES := $(foreach mod, $(MODULE_DIRS), $(call set_release,$(mod)) ))
-	echo "SUPPORT=${MKFILE_DIR}" > "$(MKFILE_DIR)/configure/RELEASE"
-	echo "EPICS_BASE=${MKFILE_DIR}/epics-base" >> "$(MKFILE_DIR)/configure/RELEASE"
+	echo "SUPPORT=${SUPPORT}" > "$(MKFILE_DIR)/configure/RELEASE"
+	echo "EPICS_BASE=${SUPPORT}/epics-base" >> "$(MKFILE_DIR)/configure/RELEASE"
 	cat "${MKFILE_DIR}/configure/RELEASE.template" >> "$(MKFILE_DIR)/configure/RELEASE"
 	configure/modify_release.py SNCSEQ UNSET $(RELEASE_FILES)
 	configure/make_release.py "configure/RELEASE" $(RELEASE_FILES)
@@ -206,4 +209,7 @@ PHONY: .version_header
 	@printf "%20s = %s\n" \
 		"$(patsubst %_version,%,$@)" \
 		"$(shell cd $(patsubst %_version,%,$@) && git describe --tags)"
+
+.PHONY: test
+test:
 
