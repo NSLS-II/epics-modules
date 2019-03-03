@@ -112,6 +112,8 @@ $(MODULE_DIRS):
 		      areaDetector/configure/RELEASE_LIBS.local
 	cp -nv areaDetector/configure/EXAMPLE_RELEASE_PRODS.local \
 		      areaDetector/configure/RELEASE_PRODS.local
+	cp -nv configure/RELEASE.local.linux-x86_64 \
+		      areaDetector/configure/RELEASE.local.linux-x86_64
 
 .PHONY: release
 release: .release_areadetector
@@ -186,6 +188,7 @@ clean_release: clean_modules
 	rm -f areaDetector/configure/RELEASE_SUPPORT.local
 	rm -f areaDetector/configure/RELEASE_LIBS.local
 	rm -f areaDetector/configure/RELEASE_PRODS.local
+	rm -f areaDetector/configure/RELEASE.local.linux-x86_64
 	
 #
 ## Make version info from git
