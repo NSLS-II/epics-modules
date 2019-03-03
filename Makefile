@@ -1,6 +1,7 @@
 # Some defaults
 prefix = /opt
 EPICS_DIR = /epics
+TAR_NAME = epics-modules
 
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
@@ -210,6 +211,9 @@ PHONY: .version_header
 		"$(patsubst %_version,%,$@)" \
 		"$(shell cd $(patsubst %_version,%,$@) && git describe --tags)"
 
-.PHONY: test
-test:
+.PHONY: archive
+archive:
+	tar --exclude-vcs --exclude-backups \
+        --transform 's,^,$(prefix)$(EPICS_DIR)/,' --show-transformed \
+        -cvjf ../$(TAR_NAME)_$(EPICS_HOST_ARCH).tar.gz $(MODULE_DIRS)
 
