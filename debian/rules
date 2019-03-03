@@ -16,4 +16,5 @@ override_dh_auto_install:
 	dh_auto_install -- prefix=/opt
 
 override_dh_shlibdeps:
-	dh_shlibdeps -X areaDetector -X pcre
+	dh_shlibdeps -X andorSupport -X andor3Support -X pointGreySupport \
+		-X spinnakerSupport -X pcre -X pvcamSupport -X libezcaIDL
