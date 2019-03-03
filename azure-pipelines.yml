@@ -41,9 +41,9 @@ jobs:
     displayName: 'Run areaDetector tests'
 
   - script: |
-      mkdir -p release
-      tar --exclude-vcs --exclude-backups -cvjf release/areaDetector-$EPICS_HOST_ARCH.tar.gz areaDetector
-      make versions > release/release.txt
+      make release SUPPORT=/opt/epics
+      make archive
+      make versions > ../release.txt
     displayName: Make tarballs and release files
 
   - script: |
@@ -56,12 +56,12 @@ jobs:
       repositoryName: NSLS-II/epics-modules
       action: 'edit'
       target: '$(Build.SourceVersion)'
-      assets: 'release/*.tar.gz'
+      assets: '../*.tar.gz'
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
       releaseNotesSource: 'file'
-      releaseNotesFile: 'release/release.txt'
+      releaseNotesFile: '../release.txt'
     displayName: 'Create GitHub Release'
 
 - job: Windows
