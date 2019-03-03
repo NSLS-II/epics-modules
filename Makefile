@@ -2,13 +2,12 @@
 prefix = /opt
 EPICS_DIR = /epics
 TAR_NAME = epics-modules
+TAR_PREFIX = opt/epics
 
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
 SUPPORT := $(or $(SUPPORT), $(MKFILE_DIR))
-
-$(info $(SUPPORT))
 
 #
 ## Version Definitions
@@ -118,6 +117,8 @@ $(MODULE_DIRS):
 		      areaDetector/configure/RELEASE_PRODS.local
 	cp -nv configure/RELEASE.local.linux-x86_64 \
 		      areaDetector/configure/RELEASE.local.linux-x86_64
+	cp -nv areaDetector/configure/EXAMPLE_CONFIG_SITE.local.Linux \
+		      areaDetector/configure/CONFIG_SITE.local.Linux
 
 .PHONY: release
 release: .release_areadetector
@@ -214,6 +215,6 @@ PHONY: .version_header
 .PHONY: archive
 archive:
 	tar --exclude-vcs --exclude-backups \
-        --transform 's,^,$(prefix)$(EPICS_DIR)/,' --show-transformed \
+        --transform 's,^,$(TAR_PREFIX)/,' --show-transformed \
         -cvjf ../$(TAR_NAME)_$(EPICS_HOST_ARCH).tar.gz $(MODULE_DIRS)
 
