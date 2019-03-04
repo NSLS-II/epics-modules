@@ -3,6 +3,7 @@ trigger:
 
 jobs:
 - job: Linux
+  timeoutInMinutes: 0
   pool:
     vmImage: 'Ubuntu-16.04'
   variables:
