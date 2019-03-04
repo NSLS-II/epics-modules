@@ -10,8 +10,14 @@ build:
 	make
 	make install DESTDIR=debian/epics-modules
 	dh_makeshlibs
+	dh_shlibdeps -X "linux-x86/" \
+		         -X "stream/pcre" \
+				 -X "spinnakerSupport" \
+				 -X "ADViewers/IDL" \
+				 -X "os/Linux/" \
+				 -X "andorIOC"
 	dh_gencontrol
-	dh_builddep
+	dh_builddeb
 
 #%:
 #	dh $@ 
