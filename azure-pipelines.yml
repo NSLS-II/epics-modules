@@ -91,14 +91,6 @@ jobs:
       python configure/modify_release.py BOOST_INCLUDE "%BUILD_STAGINGDIRECTORY%/boost_%BOOST_VERSION%" areaDetector/configure/CONFIG_SITE.local
     displayName: 'Modify AD Release File'
 
-  - script: |
-      curl -Lo boost.zip  https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.zip
-      unzip -q boost.zip
-      cd boost_1_69_0
-      call bootstrap.bat
-      .\b2 toolset=msvc link=static threading=multi runtime-link=static
-    displayName: Build Boost
-
   - script: | 
       set PATH=C:\ProgramData\Chocolatey\bin;C:\Windows\System32
       call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCH%
@@ -106,6 +98,7 @@ jobs:
       PATH
       make areaDetector
     displayName: 'Build areaDetector'
+
   - script: .\asyn\asyn\asynPortDriver\unittest\O.%EPICS_HOST_ARCH%\asynPortDriverTest
     displayName: Run Asyn Tests
 
