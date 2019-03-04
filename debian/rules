@@ -1,21 +1,33 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-%:
-	dh $@ 
-
-override_dh_auto_configure:
-
-override_dh_auto_test:
-
-override_dh_auto_build:
+clean:
 	make release
-	make 
-	make release SUPPORT=/opt/epics 
+	make clean
 
-override_dh_auto_install:
-	dh_auto_install -- prefix=/opt
+build:
+	make release
+	make
+	make install DESTDIR=debian/epics-modules
+	dh_makeshlibs
+	dh_gencontrol
+	dh_builddep
 
-override_dh_shlibdeps:
-	dh_shlibdeps -X andorSupport -X andor3Support -X pointGreySupport \
-		-X spinnakerSupport -X pcre -X pvcamSupport -X libezcaIDL
+#%:
+#	dh $@ 
+#
+#override_dh_auto_configure:
+#
+#override_dh_auto_test:
+#
+#override_dh_auto_build:
+#	make release
+#	make 
+#	make release SUPPORT=/opt/epics 
+#
+#override_dh_auto_install:
+#	dh_auto_install -- prefix=/opt
+#
+#override_dh_shlibdeps:
+#	dh_shlibdeps -X andorSupport -X andor3Support -X pointGreySupport \
+#		-X spinnakerSupport -X pcre -X pvcamSupport -X libezcaIDL
