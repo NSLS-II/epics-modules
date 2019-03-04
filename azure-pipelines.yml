@@ -45,6 +45,7 @@ jobs:
       make release SUPPORT=/opt/epics
       make archive
       make versions > ../release.txt
+      make release
     displayName: Make tarballs and release files
 
   - script: |
