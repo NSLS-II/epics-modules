@@ -67,6 +67,7 @@ MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
 			  ipUnidig ipac modbus motor sscan stream quadEM
 
 MODULE_DIRS_CLEAN = $(addsuffix _clean,$(MODULE_DIRS))
+MODULE_DIRS_UNINSTALL = $(addsuffix _uninstall,$(MODULE_DIRS))
 MODULE_DIRS_INSTALL = $(addsuffix _install,$(MODULE_DIRS))
 MODULE_DIRS_VERSION = $(addsuffix _version,$(MODULE_DIRS))
 
@@ -129,6 +130,8 @@ release: .release_areadetector
 	configure/modify_release.py SNCSEQ UNSET $(RELEASE_FILES)
 	configure/make_release.py "configure/RELEASE" $(RELEASE_FILES)
 	configure/modify_release.py MAKE_TEST_IOC_APP UNSET "iocStats/configure/RELEASE"
+	configure/modify_release.py STATIC_BUILD YES "epics-base/configure/CONFIG_SITE"
+	configure/modify_release.py SHARED_LIBRARIES NO "epics-base/configure/CONFIG_SITE"
 
 #
 ## Update all git repos to their master (or equivalent)
@@ -177,16 +180,22 @@ install: .install $(MODULE_DIRS_INSTALL)
 #
 
 .PHONY: clean
-clean: clean_release
+clean: clean_release_files
 
 .PHONY: clean_modules
 clean_modules: $(MODULE_DIRS_CLEAN)
 
+.PHONY: uninstal
+uninstall: $(MODULE_DIRS_UNINSTALL)
+
 %_clean: 
 	$(MAKE) -C $(patsubst %_clean,%,$@) clean
 
-.PHONY: clean_release
-clean_release: clean_modules
+%_uninstall: 
+	$(MAKE) -C $(patsubst %_uninstall,%,$@) uninstall
+
+.PHONY: clean_release_files
+clean_release_files: clean_modules
 	rm -f configure/RELEASE
 	rm -f areaDetector/configure/CONFIG_SITE.local
 	rm -f areaDetector/configure/RELEASE.local
