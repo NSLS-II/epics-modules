@@ -3,6 +3,7 @@ trigger:
 
 jobs:
 - job: Linux
+  timeoutInMinutes: 0
   pool:
     vmImage: 'Ubuntu-16.04'
   variables:
@@ -10,8 +11,10 @@ jobs:
   
   steps:
   - script: |
-      sudo apt-get -y install libreadline-dev
-      sudo apt-get -y install perl re2c libboost-all-dev
+      sudo apt-get -y install \
+        libreadline-dev libraw1394-11 \
+        perl re2c libboost-all-dev \
+        build-essential devscripts debhelper \
     displayName: 'Install Packages'
   
   - script: |
@@ -40,10 +43,15 @@ jobs:
     displayName: 'Run areaDetector tests'
 
   - script: |
-      mkdir -p release
-      tar --exclude-vcs --exclude-backups -cvjf release/areaDetector-$EPICS_HOST_ARCH.tar.gz areaDetector
-      make versions > release/release.txt
+      make release SUPPORT=/opt/epics
+      make archive
+      make versions > ../release.txt
+      make release
     displayName: Make tarballs and release files
+
+  - script: |
+      fakeroot debian/rules build
+    displayName: Make Debian package
   
   - task: GitHubRelease@0
     inputs:
@@ -51,12 +59,14 @@ jobs:
       repositoryName: NSLS-II/epics-modules
       action: 'edit'
       target: '$(Build.SourceVersion)'
-      assets: 'release/*.tar.gz'
+      assets: |
+          '../*.tar.gz'
+          '../*.dpkg'
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
       releaseNotesSource: 'file'
-      releaseNotesFile: 'release/release.txt'
+      releaseNotesFile: '../release.txt'
     displayName: 'Create GitHub Release'
 
 - job: Windows

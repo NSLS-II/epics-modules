@@ -1,6 +1,13 @@
+# Some defaults
+prefix = /opt
+EPICS_DIR = /epics
+TAR_NAME = epics-modules
+TAR_PREFIX = opt/epics
+
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
+SUPPORT := $(or $(SUPPORT), $(MKFILE_DIR))
 
 #
 ## Version Definitions
@@ -60,6 +67,8 @@ MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
 			  ipUnidig ipac modbus motor sscan stream quadEM
 
 MODULE_DIRS_CLEAN = $(addsuffix _clean,$(MODULE_DIRS))
+MODULE_DIRS_UNINSTALL = $(addsuffix _uninstall,$(MODULE_DIRS))
+MODULE_DIRS_INSTALL = $(addsuffix _install,$(MODULE_DIRS))
 MODULE_DIRS_VERSION = $(addsuffix _version,$(MODULE_DIRS))
 
 .PHONY: all
@@ -107,16 +116,22 @@ $(MODULE_DIRS):
 		      areaDetector/configure/RELEASE_LIBS.local
 	cp -nv areaDetector/configure/EXAMPLE_RELEASE_PRODS.local \
 		      areaDetector/configure/RELEASE_PRODS.local
+	cp -nv configure/RELEASE.local.linux-x86_64 \
+		      areaDetector/configure/RELEASE.local.linux-x86_64
+	cp -nv areaDetector/configure/EXAMPLE_CONFIG_SITE.local.Linux \
+		      areaDetector/configure/CONFIG_SITE.local.Linux
 
 .PHONY: release
 release: .release_areadetector
 	$(eval RELEASE_FILES := $(foreach mod, $(MODULE_DIRS), $(call set_release,$(mod)) ))
-	echo "SUPPORT=${MKFILE_DIR}" > "$(MKFILE_DIR)/configure/RELEASE"
-	echo "EPICS_BASE=${MKFILE_DIR}/epics-base" >> "$(MKFILE_DIR)/configure/RELEASE"
+	echo "SUPPORT=${SUPPORT}" > "$(MKFILE_DIR)/configure/RELEASE"
+	echo "EPICS_BASE=${SUPPORT}/epics-base" >> "$(MKFILE_DIR)/configure/RELEASE"
 	cat "${MKFILE_DIR}/configure/RELEASE.template" >> "$(MKFILE_DIR)/configure/RELEASE"
 	configure/modify_release.py SNCSEQ UNSET $(RELEASE_FILES)
 	configure/make_release.py "configure/RELEASE" $(RELEASE_FILES)
 	configure/modify_release.py MAKE_TEST_IOC_APP UNSET "iocStats/configure/RELEASE"
+	configure/modify_release.py STATIC_BUILD YES "epics-base/configure/CONFIG_SITE"
+	configure/modify_release.py SHARED_LIBRARIES NO "epics-base/configure/CONFIG_SITE"
 
 #
 ## Update all git repos to their master (or equivalent)
@@ -146,27 +161,48 @@ update:
 	git submodule foreach --recursive "git stash pop || true"
 
 #
+## Install into directory
+#
+
+.PHONY: .install
+.install: 
+	install -Dd $(DESTDIR)$(prefix)/$(EPICS_DIR)
+
+.PHONY: install
+install: .install $(MODULE_DIRS_INSTALL)
+
+%_install: 
+	tar --exclude-vcs -cf - $(patsubst %_install,%,$@) | \
+		(cd $(DESTDIR)$(prefix)/$(EPICS_DIR) && tar xvf - )
+#
 ## Clean up by running "make clean" in all modules and deleting the areadetector
 ## local files
 #
 
 .PHONY: clean
-clean: clean_release
+clean: clean_release_files
 
 .PHONY: clean_modules
 clean_modules: $(MODULE_DIRS_CLEAN)
 
+.PHONY: uninstal
+uninstall: $(MODULE_DIRS_UNINSTALL)
+
 %_clean: 
 	$(MAKE) -C $(patsubst %_clean,%,$@) clean
 
-.PHONY: clean_release
-clean_release: clean_modules
+%_uninstall: 
+	$(MAKE) -C $(patsubst %_uninstall,%,$@) uninstall
+
+.PHONY: clean_release_files
+clean_release_files: clean_modules
 	rm -f configure/RELEASE
 	rm -f areaDetector/configure/CONFIG_SITE.local
 	rm -f areaDetector/configure/RELEASE.local
 	rm -f areaDetector/configure/RELEASE_SUPPORT.local
 	rm -f areaDetector/configure/RELEASE_LIBS.local
 	rm -f areaDetector/configure/RELEASE_PRODS.local
+	rm -f areaDetector/configure/RELEASE.local.linux-x86_64
 	
 #
 ## Make version info from git
@@ -184,4 +220,10 @@ PHONY: .version_header
 	@printf "%20s = %s\n" \
 		"$(patsubst %_version,%,$@)" \
 		"$(shell cd $(patsubst %_version,%,$@) && git describe --tags)"
+
+.PHONY: archive
+archive:
+	tar --exclude-vcs --exclude-backups \
+        --transform 's,^,$(TAR_PREFIX)/,' --show-transformed \
+        -cvjf ../$(TAR_NAME)_$(EPICS_HOST_ARCH).tar.gz $(MODULE_DIRS)
 

@@ -1,0 +1,14 @@
+Source: epics-modules
+Priority: extra
+Maintainer: Stuart B. Wilkins <stuart@stuwilkins.org>
+Build-Depends: debhelper (>= 9), libc6, libstdc++6, libraw1394-11
+Standards-Version: 3.9.4
+Section: web
+Homepage: https://github.com/NSLS-II/epics-modules
+Vcs-Git: https://github.com/NSLS-II/epics-modules.git
+Vcs-Browser: https://github.com/NSLS-II/epics-modules
+
+Package: epics-modules
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Epics Modules for Beamline control
