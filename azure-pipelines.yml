@@ -59,7 +59,9 @@ jobs:
       repositoryName: NSLS-II/epics-modules
       action: 'edit'
       target: '$(Build.SourceVersion)'
-      assets: '../*.deb'
+      assets: |
+          ../*.deb
+          ../*.tar.gz
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
