@@ -39,7 +39,7 @@ jobs:
   - script: asyn/asyn/asynPortDriver/unittest/O.$EPICS_HOST_ARCH/asynPortDriverTest
     displayName: 'Run asyn tests'
   
-  - script: areaDeebtector/ADCore/bin/$EPICS_HOST_ARCH/plugin-test --log_level=test_suite
+  - script: areaDetector/ADCore/bin/$EPICS_HOST_ARCH/plugin-test --log_level=test_suite
     displayName: 'Run areaDetector tests'
 
   - script: |
