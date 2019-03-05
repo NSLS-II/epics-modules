@@ -39,17 +39,17 @@ jobs:
   - script: asyn/asyn/asynPortDriver/unittest/O.$EPICS_HOST_ARCH/asynPortDriverTest
     displayName: 'Run asyn tests'
   
-  - script: areaDetector/ADCore/bin/$EPICS_HOST_ARCH/plugin-test --log_level=test_suite
+  - script: areaDeebtector/ADCore/bin/$EPICS_HOST_ARCH/plugin-test --log_level=test_suite
     displayName: 'Run areaDetector tests'
 
   - script: |
       make release SUPPORT=/opt/epics
       make archive
       make versions > ../release.txt
-      make release
     displayName: Make tarballs and release files
 
   - script: |
+      make release
       fakeroot debian/rules build
     displayName: Make Debian package
   
@@ -59,9 +59,7 @@ jobs:
       repositoryName: NSLS-II/epics-modules
       action: 'edit'
       target: '$(Build.SourceVersion)'
-      assets: |
-          '../*.tar.gz'
-          '../*.dpkg'
+      assets: '../*.deb'
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
