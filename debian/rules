@@ -8,6 +8,7 @@ clean:
 build:
 	make release
 	make
+	make release SUPPORT=/opt/epics
 	make install DESTDIR=debian/epics-modules
 	dh_makeshlibs
 	dh_shlibdeps -X "linux-x86/" \
