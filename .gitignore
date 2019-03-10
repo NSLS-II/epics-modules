@@ -3,7 +3,5 @@ configure/VERSIONS
 configure/VERSIONS.*
 release
 *.swp
-debian/files
-debian/epics-modules
-debian/epics-modules.*
-debian/debhelper-build-stamp
+debian/opt
+*.deb
