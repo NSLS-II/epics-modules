@@ -185,7 +185,7 @@ install: .install $(MODULE_DIRS_INSTALL) configure_install
 
 %_install: 
 	tar --exclude-vcs -cf - $(patsubst %_install,%,$@) | \
-		(cd $(DESTDIR)$(prefix)/$(EPICS_DIR) && tar xvf - )
+		(cd $(DESTDIR)$(prefix)/$(EPICS_DIR) && tar xf - )
 #
 ## Clean up by running "make clean" in all modules and deleting the areadetector
 ## local files
@@ -236,7 +236,7 @@ PHONY: .version_header
 .PHONY: archive
 archive:
 	tar --exclude-vcs --exclude-backups \
-	-cvjf $(PACKAGE_NAME)_$(EPICS_HOST_ARCH)_$(VERSION).tar.bz2 \
+	-cjf $(PACKAGE_NAME)_$(EPICS_HOST_ARCH)_$(VERSION).tar.bz2 \
 	--transform 's,$(DESTDIR)/,,' --show-transformed \
 	$(DESTDIR)
 
