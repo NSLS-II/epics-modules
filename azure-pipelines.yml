@@ -43,17 +43,14 @@ jobs:
     displayName: 'Run areaDetector tests'
 
   - script: |
+      make versions > release.txt
+      cat release.txt
       make install DESTDIR=build
       make release SUPPORT=/opt/epics RELEASE_PREFIX=build/opt/epics/
       make archive DESTDIR=build
-      make versions > release.txt
-    displayName: Make tarballs and release files
-
-  - script: |
-      make release
-      make debian
-    displayName: Make Debian package
-  
+      make debian DESTDIR=build
+    displayName: Make tarball, debian package and release file
+    
   - task: GitHubRelease@0
     inputs:
       gitHubConnection: NSLS-II

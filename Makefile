@@ -3,23 +3,28 @@ prefix = /opt
 EPICS_DIR = /epics
 PACKAGE_NAME = epics-modules
 TAR_PREFIX = opt/epics
-
-VERSION = $(shell git describe --tags --always)
-$(info git version      = $(VERSION))
-$(info prefix           = $(prefix))
-$(info EPICS_DIR        = $(EPICS_DIR))
-$(info PACKAGE_NAME     = $(PACKAGE_NAME))
-$(info TAR_PREFIX       = $(TAR_PREFIX))
-$(info RELEASE_PREFIX   = $(RELEASE_PREFIX))
+DEBIAN=ci/DEBIAN
 
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
 SUPPORT := $(or $(SUPPORT), $(MKFILE_DIR))
 
+# Set the version from the git info
+VERSION = $(shell git describe --tags --always)
+
+# Print INFO
+
+$(info git version      = $(VERSION))
+$(info prefix           = $(prefix))
+$(info EPICS_DIR        = $(EPICS_DIR))
+$(info PACKAGE_NAME     = $(PACKAGE_NAME))
+$(info TAR_PREFIX       = $(TAR_PREFIX))
+$(info RELEASE_PREFIX   = $(RELEASE_PREFIX))
 $(info MKFILE_PATH      = $(MKFILE_PATH))
 $(info MKFILE_DIR       = $(MKFILE_DIR))
 $(info SUPPORT          = $(SUPPORT))
+$(info DEBIAN           = $(DEBIAN))
 
 #
 ## Version Definitions
@@ -242,6 +247,5 @@ archive:
 
 .PHONY: debian
 debian: 
-	$(MAKE) release SUPPORT=/opt/epics
-	$(MAKE) install DESTDIR=debian/
-	dpkg-deb --build debian $(PACKAGE_NAME)_$(VERSION).deb
+	cp -r $(DEBIAN) $(DESTDIR)
+	dpkg-deb --build $(DESTDIR) $(PACKAGE_NAME)_$(VERSION).deb
