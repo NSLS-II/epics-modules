@@ -1,0 +1,9 @@
+Package: epics-modules
+Version: 0.1-2
+Architecture: amd64
+Maintainer: Stuart B. Wilkins <stuart@stuwilkins.org>
+Depends: libc6,  libstdc++6, libgcc1, libreadline6, libxcb1, libgomp1, libtinfo5, libxau6, libxdmcp6, libbsd0, libraw1394-11, libusb-1.0-0, libx11-6, libxext6
+Section: unknown
+Priority: extra
+Homepage: https://github.com/NSLS-II/epics-modules
+Description: Epics Modules for Beamline control
