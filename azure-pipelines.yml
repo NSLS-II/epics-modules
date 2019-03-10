@@ -50,7 +50,7 @@ jobs:
 
   - script: |
       make release
-      fakeroot debian/rules build
+      make debian
     displayName: Make Debian package
   
   - task: GitHubRelease@0
@@ -60,7 +60,7 @@ jobs:
       action: 'edit'
       target: '$(Build.SourceVersion)'
       assets: |
-          ../*.deb
+          *.deb
           ../*.tar.gz
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
