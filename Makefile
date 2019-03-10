@@ -236,11 +236,12 @@ PHONY: .version_header
 .PHONY: archive
 archive:
 	tar --exclude-vcs --exclude-backups \
-        --transform 's,^,$(TAR_PREFIX)/,' --show-transformed \
-        -cvjf ../$(PACKAGE_NAME)_$(EPICS_HOST_ARCH)_$(VERSION).tar.gz $(MODULE_DIRS) configure
+	-cvjf $(PACKAGE_NAME)_$(EPICS_HOST_ARCH)_$(VERSION).tar.bz2 \
+	--transform 's,$(DESTDIR)/,,' --show-transformed \
+	$(DESTDIR)
 
 .PHONY: debian
-debian: all
+debian: 
 	$(MAKE) release SUPPORT=/opt/epics
 	$(MAKE) install DESTDIR=debian/
 	dpkg-deb --build debian $(PACKAGE_NAME)_$(VERSION).deb

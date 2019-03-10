@@ -5,3 +5,4 @@ release
 *.swp
 debian/opt
 *.deb
+build
