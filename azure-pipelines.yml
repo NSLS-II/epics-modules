@@ -43,16 +43,14 @@ jobs:
     displayName: 'Run areaDetector tests'
 
   - script: |
-      make release SUPPORT=/opt/epics
-      make archive
-      make versions > ../release.txt
-    displayName: Make tarballs and release files
-
-  - script: |
-      make release
-      fakeroot debian/rules build
-    displayName: Make Debian package
-  
+      make versions > release.txt
+      cat release.txt
+      make install DESTDIR=build
+      make release SUPPORT=/opt/epics RELEASE_PREFIX=build/opt/epics/
+      make archive DESTDIR=build
+      make debian DESTDIR=build
+    displayName: Make tarball, debian package and release file
+    
   - task: GitHubRelease@0
     inputs:
       gitHubConnection: NSLS-II
@@ -60,13 +58,13 @@ jobs:
       action: 'edit'
       target: '$(Build.SourceVersion)'
       assets: |
-          ../*.deb
-          ../*.tar.gz
+          *.deb
+          *.tar.bz2
       assetUploadMode: 'replace'
       tagSource: 'Git tag'
       tag: 'v0.1'
       releaseNotesSource: 'file'
-      releaseNotesFile: '../release.txt'
+      releaseNotesFile: 'release.txt'
     displayName: 'Create GitHub Release'
 
 - job: Windows

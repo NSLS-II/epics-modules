@@ -1,13 +1,30 @@
 # Some defaults
 prefix = /opt
 EPICS_DIR = /epics
-TAR_NAME = epics-modules
+PACKAGE_NAME = epics-modules
 TAR_PREFIX = opt/epics
+DEBIAN=ci/DEBIAN
 
 # Set the SUPPORT Directory (from this makefile)
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR:= $(dir $(MKFILE_PATH))
 SUPPORT := $(or $(SUPPORT), $(MKFILE_DIR))
+
+# Set the version from the git info
+VERSION = $(shell git describe --tags --always)
+
+# Print INFO
+
+$(info git version      = $(VERSION))
+$(info prefix           = $(prefix))
+$(info EPICS_DIR        = $(EPICS_DIR))
+$(info PACKAGE_NAME     = $(PACKAGE_NAME))
+$(info TAR_PREFIX       = $(TAR_PREFIX))
+$(info RELEASE_PREFIX   = $(RELEASE_PREFIX))
+$(info MKFILE_PATH      = $(MKFILE_PATH))
+$(info MKFILE_DIR       = $(MKFILE_DIR))
+$(info SUPPORT          = $(SUPPORT))
+$(info DEBIAN           = $(DEBIAN))
 
 #
 ## Version Definitions
@@ -106,32 +123,32 @@ $(MODULE_DIRS):
 
 .PHONY: .release_areadetector
 .release_areadetector:
-	cp -nv areaDetector/configure/EXAMPLE_CONFIG_SITE.local \
-		      areaDetector/configure/CONFIG_SITE.local
-	cp -nv areaDetector/configure/EXAMPLE_RELEASE.local \
-		      areaDetector/configure/RELEASE.local
-	cp -nv areaDetector/configure/EXAMPLE_RELEASE_SUPPORT.local \
-		      areaDetector/configure/RELEASE_SUPPORT.local
-	cp -nv areaDetector/configure/EXAMPLE_RELEASE_LIBS.local \
-		      areaDetector/configure/RELEASE_LIBS.local
-	cp -nv areaDetector/configure/EXAMPLE_RELEASE_PRODS.local \
-		      areaDetector/configure/RELEASE_PRODS.local
+	cp -nv $(RELEASE_PREFIX)areaDetector/configure/EXAMPLE_CONFIG_SITE.local \
+		      $(RELEASE_PREFIX)areaDetector/configure/CONFIG_SITE.local
+	cp -nv $(RELEASE_PREFIX)areaDetector/configure/EXAMPLE_RELEASE.local \
+		      $(RELEASE_PREFIX)areaDetector/configure/RELEASE.local
+	cp -nv $(RELEASE_PREFIX)areaDetector/configure/EXAMPLE_RELEASE_SUPPORT.local \
+		      $(RELEASE_PREFIX)areaDetector/configure/RELEASE_SUPPORT.local
+	cp -nv $(RELEASE_PREFIX)areaDetector/configure/EXAMPLE_RELEASE_LIBS.local \
+		      $(RELEASE_PREFIX)areaDetector/configure/RELEASE_LIBS.local
+	cp -nv $(RELEASE_PREFIX)areaDetector/configure/EXAMPLE_RELEASE_PRODS.local \
+		      $(RELEASE_PREFIX)areaDetector/configure/RELEASE_PRODS.local
 	cp -nv configure/RELEASE.local.linux-x86_64 \
-		      areaDetector/configure/RELEASE.local.linux-x86_64
-	cp -nv areaDetector/configure/EXAMPLE_CONFIG_SITE.local.Linux \
-		      areaDetector/configure/CONFIG_SITE.local.Linux
+		      $(RELEASE_PREFIX)areaDetector/configure/RELEASE.local.linux-x86_64
+	cp -nv $(RELEASE_PREFIX)areaDetector/configure/EXAMPLE_CONFIG_SITE.local.Linux \
+		      $(RELEASE_PREFIX)areaDetector/configure/CONFIG_SITE.local.Linux
 
 .PHONY: release
 release: .release_areadetector
 	$(eval RELEASE_FILES := $(foreach mod, $(MODULE_DIRS), $(call set_release,$(mod)) ))
-	echo "SUPPORT=${SUPPORT}" > "$(MKFILE_DIR)/configure/RELEASE"
-	echo "EPICS_BASE=${SUPPORT}/epics-base" >> "$(MKFILE_DIR)/configure/RELEASE"
-	cat "${MKFILE_DIR}/configure/RELEASE.template" >> "$(MKFILE_DIR)/configure/RELEASE"
-	configure/modify_release.py SNCSEQ UNSET $(RELEASE_FILES)
+	echo "SUPPORT=$(SUPPORT)" > "$(RELEASE_PREFIX)configure/RELEASE"
+	echo "EPICS_BASE=$(SUPPORT)/epics-base" >> "$(RELEASE_PREFIX)configure/RELEASE"
+	cat "$(RELEASE_PREFIX)configure/RELEASE.template" >> "$(RELEASE_PREFIX)configure/RELEASE"
+	configure/modify_release.py SNCSEQ UNSET $(RELEASE_PREFIX)$(RELEASE_FILES)
 	configure/make_release.py "configure/RELEASE" $(RELEASE_FILES)
-	configure/modify_release.py MAKE_TEST_IOC_APP UNSET "iocStats/configure/RELEASE"
-	configure/modify_release.py STATIC_BUILD YES "epics-base/configure/CONFIG_SITE"
-	configure/modify_release.py SHARED_LIBRARIES NO "epics-base/configure/CONFIG_SITE"
+	configure/modify_release.py MAKE_TEST_IOC_APP UNSET "$(RELEASE_PREFIX)iocStats/configure/RELEASE"
+	configure/modify_release.py STATIC_BUILD YES "$(RELEASE_PREFIX)epics-base/configure/CONFIG_SITE"
+	configure/modify_release.py SHARED_LIBRARIES NO "$(RELEASE_PREFIX)epics-base/configure/CONFIG_SITE"
 
 #
 ## Update all git repos to their master (or equivalent)
@@ -169,11 +186,11 @@ update:
 	install -Dd $(DESTDIR)$(prefix)/$(EPICS_DIR)
 
 .PHONY: install
-install: .install $(MODULE_DIRS_INSTALL)
+install: .install $(MODULE_DIRS_INSTALL) configure_install
 
 %_install: 
 	tar --exclude-vcs -cf - $(patsubst %_install,%,$@) | \
-		(cd $(DESTDIR)$(prefix)/$(EPICS_DIR) && tar xvf - )
+		(cd $(DESTDIR)$(prefix)/$(EPICS_DIR) && tar xf - )
 #
 ## Clean up by running "make clean" in all modules and deleting the areadetector
 ## local files
@@ -224,6 +241,11 @@ PHONY: .version_header
 .PHONY: archive
 archive:
 	tar --exclude-vcs --exclude-backups \
-        --transform 's,^,$(TAR_PREFIX)/,' --show-transformed \
-        -cvjf ../$(TAR_NAME)_$(EPICS_HOST_ARCH).tar.gz $(MODULE_DIRS)
+	-cjf $(PACKAGE_NAME)_$(EPICS_HOST_ARCH)_$(VERSION).tar.bz2 \
+	--transform 's,$(DESTDIR)/,,' --show-transformed \
+	$(DESTDIR)
 
+.PHONY: debian
+debian: 
+	cp -r $(DEBIAN) $(DESTDIR)
+	dpkg-deb --build $(DESTDIR) $(PACKAGE_NAME)_$(VERSION).deb
