@@ -46,6 +46,7 @@ STREAM_VERSION        := $(or $(STREAM_VERSION), master)
 QUADEM_VERSION        := $(or $(QUADEM_VERSION), master)
 IPAC_VERSION          := $(or $(IPAC_VERSION), master)
 IPUNIDIG_VERSION      := $(or $(IPUNIDIG_VERSION), master)
+XSPRESS3_VERSION      := $(or $(XSPRESS3_VERSION), qd-prod)
 
 #
 ## If files exist in the configure dir, include them If files exist in the configure dir, include them  
@@ -81,7 +82,7 @@ define set_release
 endef
 
 MODULE_DIRS = areaDetector asyn autosave busy calc epics-base iocStats \
-			  ipUnidig ipac modbus motor sscan stream quadEM
+			  ipUnidig ipac modbus motor sscan stream quadEM xspress3-epics
 
 MODULE_DIRS_CLEAN = $(addsuffix _clean,$(MODULE_DIRS))
 MODULE_DIRS_UNINSTALL = $(addsuffix _uninstall,$(MODULE_DIRS))
@@ -116,6 +117,8 @@ quadEM: epics-base ipac busy ipUnidig autosave sscan calc iocStats areaDetector
 ipac: epics-base 
 
 areaDetector: epics-base asyn calc sscan busy autosave iocStats
+
+xspress3-epics: epics-base asyn calc busy areaDetector
 
 .PHONY: $(MODULE_DIRS)
 $(MODULE_DIRS):
@@ -173,6 +176,8 @@ update:
 	cd sscan && git fetch --all --tags --prune && git checkout $(SSCAN_VERSION)
 	cd stream && git fetch --all --tags --prune && git checkout $(STREAM_VERSION)
 	#cd stream/StreamDevice && git fetch --all --tags --prune && git checkout $(STREAM_VERSION)
+	cd xspress3-epics && git fetch --all --tags --prune && git checkout $(XSPRESS3_VERSION)
+	cd areaDetector && git submodule update --init --recursive
 	cd areaDetector && git fetch --all --tags --prune && git checkout $(AREA_DETECTOR_VERSION)
 	cd areaDetector && git submodule foreach "git fetch --all --tags --prune && git checkout master"
 	git submodule foreach --recursive "git stash pop || true"

@@ -40,3 +40,6 @@
 [submodule "ipUnidig"]
 	path = ipUnidig
 	url = https://github.com/epics-modules/ipUnidig.git
+[submodule "xspress3-epics"]
+	path = xspress3-epics
+	url = https://github.com/NSLS-II/xspress3-epics.git
